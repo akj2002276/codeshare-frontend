@@ -5,23 +5,49 @@ import {
   BrowserRouter,
   Routes,
   Route,
+  useLocation,
 } from "react-router-dom";
+
+import ReactGA from "react-ga4";
 
 import "./index.css";
 
 import App from "./App";
-
 import Dashboard from "./pages/Dashboard";
-
 import Workspace from "./pages/Workspace";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+
+
+// GOOGLE ANALYTICS INIT
+ReactGA.initialize("G-NE7QPM4WFR");
+
+
+// TRACK PAGE VIEWS
+function AnalyticsTracker() {
+
+  const location = useLocation();
+
+  React.useEffect(() => {
+
+    ReactGA.send({
+      hitType: "pageview",
+      page: location.pathname,
+    });
+
+  }, [location]);
+
+  return null;
+}
+
 
 ReactDOM.createRoot(
   document.getElementById("root")
 ).render(
 
   <BrowserRouter>
+
+    <AnalyticsTracker />
 
     <Routes>
 
@@ -39,15 +65,17 @@ ReactDOM.createRoot(
         path="/workspace/:batchId"
         element={<Workspace />}
       />
-      <Route
-  path="/login"
-  element={<Login />}
-/>
 
-<Route
-  path="/signup"
-  element={<Signup />}
-/>
+      <Route
+        path="/login"
+        element={<Login />}
+      />
+
+      <Route
+        path="/signup"
+        element={<Signup />}
+      />
+
     </Routes>
 
   </BrowserRouter>
