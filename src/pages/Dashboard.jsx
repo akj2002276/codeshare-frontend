@@ -154,7 +154,7 @@ export default function Dashboard() {
 
           <h1 className="text-5xl font-black bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">
 
-            CodeShare
+            codeshareX
 
           </h1>
 
