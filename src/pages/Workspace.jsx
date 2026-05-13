@@ -12,6 +12,7 @@ import {
   FiZoomIn,
   FiZoomOut,
   FiTrash2,
+  FiExternalLink,
 } from "react-icons/fi";
 
 import Editor from "@monaco-editor/react";
@@ -341,10 +342,13 @@ export default function Workspace() {
 
   return (
     <div className="h-screen flex bg-black text-white">
+
       {/* SIDEBAR */}
       <div className="w-80 bg-zinc-950 border-r border-zinc-800 flex flex-col">
+
         {/* HEADER */}
         <div className="p-5 border-b border-zinc-800">
+
           <h1 className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
             Workspace
           </h1>
@@ -360,11 +364,13 @@ export default function Workspace() {
               {onlineUsers.length} Users Online
             </p>
           </div>
+
         </div>
 
         {/* ACTION BUTTONS */}
         {user?.role === "trainer" && (
           <div className="p-4 flex gap-3 border-b border-zinc-800">
+
             <button
               onClick={() =>
                 setShowTopicModal(true)
@@ -385,18 +391,22 @@ export default function Workspace() {
               <FiPlus />
               File
             </button>
+
           </div>
         )}
 
         {/* TOPICS */}
         <div className="flex-1 overflow-y-auto p-3">
+
           {topics.map((topic) => (
             <motion.div
               key={topic._id}
               whileHover={{ x: 3 }}
               className="mb-3"
             >
+
               <div className="relative group">
+
                 <div
                   onClick={() =>
                     fetchFiles(topic)
@@ -422,11 +432,13 @@ export default function Workspace() {
                     <FiTrash2 />
                   </button>
                 )}
+
               </div>
 
               {selectedTopic?._id ===
                 topic._id && (
                 <div className="ml-6 mt-2 space-y-2">
+
                   {files.map((file) => (
                     <div
                       key={file._id}
@@ -436,6 +448,7 @@ export default function Workspace() {
                           : "hover:bg-zinc-800"
                       }`}
                     >
+
                       <div
                         onClick={() =>
                           openFile(file._id)
@@ -457,19 +470,26 @@ export default function Workspace() {
                           <FiTrash2 />
                         </button>
                       )}
+
                     </div>
                   ))}
+
                 </div>
               )}
+
             </motion.div>
           ))}
+
         </div>
+
       </div>
 
       {/* EDITOR */}
       <div className="flex-1 flex flex-col">
+
         {/* TOOLBAR */}
         <div className="h-16 border-b border-zinc-800 bg-zinc-950 flex items-center justify-between px-5">
+
           <h2 className="font-bold text-lg">
             {selectedFile
               ? selectedFile.fileName
@@ -477,6 +497,24 @@ export default function Workspace() {
           </h2>
 
           <div className="flex items-center gap-3">
+
+            {/* PRACTICE BUTTON */}
+            {selectedFile && (
+              <button
+                onClick={() =>
+                  window.open(
+                    "/practice",
+                    "_blank"
+                  )
+                }
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 transition flex items-center gap-2 font-semibold text-sm shadow-lg shadow-cyan-500/20"
+              >
+                <FiExternalLink />
+                Practice This Code
+              </button>
+            )}
+
+            {/* COPY */}
             <button
               onClick={copyCode}
               className="p-2 rounded-lg hover:bg-zinc-800"
@@ -484,6 +522,7 @@ export default function Workspace() {
               <FiCopy />
             </button>
 
+            {/* FONT + */}
             <button
               onClick={() =>
                 setFontSize(
@@ -495,6 +534,7 @@ export default function Workspace() {
               <FiZoomIn />
             </button>
 
+            {/* FONT - */}
             <button
               onClick={() =>
                 setFontSize(
@@ -506,6 +546,7 @@ export default function Workspace() {
               <FiZoomOut />
             </button>
 
+            {/* THEME */}
             <button
               onClick={() =>
                 setTheme(
@@ -522,11 +563,14 @@ export default function Workspace() {
                 <FiMoon />
               )}
             </button>
+
           </div>
+
         </div>
 
         {/* EDITOR */}
         <div className="flex-1">
+
           <Editor
             height="100%"
             theme={theme}
@@ -545,13 +589,17 @@ export default function Workspace() {
                 user?.role !== "trainer",
             }}
           />
+
         </div>
+
       </div>
 
       {/* TOPIC MODAL */}
       {showTopicModal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
           <div className="bg-zinc-900 p-8 rounded-3xl w-[400px] border border-zinc-800">
+
             <h2 className="text-2xl font-bold mb-6">
               Create Topic
             </h2>
@@ -569,6 +617,7 @@ export default function Workspace() {
             />
 
             <div className="flex gap-4">
+
               <button
                 onClick={createTopic}
                 className="flex-1 bg-blue-600 hover:bg-blue-700 p-4 rounded-2xl"
@@ -584,15 +633,20 @@ export default function Workspace() {
               >
                 Cancel
               </button>
+
             </div>
+
           </div>
+
         </div>
       )}
 
       {/* FILE MODAL */}
       {showFileModal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+
           <div className="bg-zinc-900 p-8 rounded-3xl w-[400px] border border-zinc-800">
+
             <h2 className="text-2xl font-bold mb-6">
               Create File
             </h2>
@@ -623,18 +677,22 @@ export default function Workspace() {
               <option value="javascript">
                 JavaScript
               </option>
+
               <option value="java">
                 Java
               </option>
+
               <option value="cpp">
                 C++
               </option>
+
               <option value="python">
                 Python
               </option>
             </select>
 
             <div className="flex gap-4">
+
               <button
                 onClick={createFile}
                 className="flex-1 bg-cyan-600 hover:bg-cyan-700 p-4 rounded-2xl"
@@ -650,10 +708,14 @@ export default function Workspace() {
               >
                 Cancel
               </button>
+
             </div>
+
           </div>
+
         </div>
       )}
+
     </div>
   );
 }

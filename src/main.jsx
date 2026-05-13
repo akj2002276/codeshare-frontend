@@ -15,6 +15,7 @@ import "./index.css";
 import App from "./App";
 import Dashboard from "./pages/Dashboard";
 import Workspace from "./pages/Workspace";
+import Practice from "./pages/Practice";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
@@ -64,6 +65,11 @@ ReactDOM.createRoot(
       <Route
         path="/workspace/:batchId"
         element={<Workspace />}
+      />
+
+      <Route
+        path="/practice"
+        element={<Practice />}
       />
 
       <Route
