@@ -1,87 +1,107 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FolderKanban, LogOut, Plus } from "lucide-react";
+
+import {
+  FolderKanban,
+  LogOut,
+  Plus,
+  Bell,
+  Trophy,
+  Code2,
+  Users,
+  CalendarDays,
+  ExternalLink,
+  Sparkles,
+  Zap,
+} from "lucide-react";
+
 import { useNavigate } from "react-router-dom";
 
 import API from "../api/axios";
 import socket from "../socket";
 
 export default function Dashboard() {
-
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
 
-  const user = JSON.parse(
-    localStorage.getItem("user")
-  );
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  const [batches, setBatches] =
-    useState([]);
+  const [batches, setBatches] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [onlineUsers, setOnlineUsers] = useState([]);
 
-  const [showModal, setShowModal] =
-    useState(false);
+  const [batchData, setBatchData] = useState({
+    batchName: "",
+    description: "",
+    accessKey: "",
+  });
 
-  const [onlineUsers, setOnlineUsers] =
-    useState([]);
+  const announcements = [
+    {
+      title: "New DSA practice files uploaded",
+      desc: "Check the latest batch workspace for updated problem solutions.",
+      tag: "Update",
+    },
+    {
+      title: "Practice Arena is live",
+      desc: "Students can now run Java, C++, Python and JavaScript code.",
+      tag: "New",
+    },
+    {
+      title: "Weekly coding challenge preparation",
+      desc: "Revise arrays, strings and recursion before upcoming contests.",
+      tag: "Reminder",
+    },
+  ];
 
-  // BATCH FORM
-  const [batchData, setBatchData] =
-    useState({
-      batchName: "",
-      description: "",
-      accessKey: "",
-    });
+  const contests = [
+    {
+      platform: "LeetCode",
+      title: "Weekly Contest",
+      time: "Sunday • 8:00 AM",
+      url: "https://leetcode.com/contest/",
+      color: "from-yellow-400 to-orange-500",
+    },
+    {
+      platform: "Codeforces",
+      title: "Upcoming Round",
+      time: "Check schedule",
+      url: "https://codeforces.com/contests",
+      color: "from-blue-400 to-cyan-500",
+    },
+    {
+      platform: "CodeChef",
+      title: "Starters",
+      time: "Wednesday • Evening",
+      url: "https://www.codechef.com/contests",
+      color: "from-purple-400 to-pink-500",
+    },
+  ];
 
-
-
-  // FETCH BATCHES
   const fetchBatches = async () => {
-
     try {
-
-      const response = await API.get(
-        "/batches",
-        {
-          headers: {
-            Authorization:
-              `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await API.get("/batches", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setBatches(response.data);
-
     } catch (error) {
-
       console.log(error);
-
     }
-
   };
 
-
-
-  // CREATE BATCH
   const createBatch = async () => {
-
     try {
+      const response = await API.post("/batches", batchData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      const response = await API.post(
-        "/batches",
-        batchData,
-        {
-          headers: {
-            Authorization:
-              `Bearer ${token}`,
-          },
-        }
-      );
-
-      setBatches([
-        ...batches,
-        response.data.batch,
-      ]);
+      setBatches([...batches, response.data.batch]);
 
       setShowModal(false);
 
@@ -90,360 +110,392 @@ export default function Dashboard() {
         description: "",
         accessKey: "",
       });
-
     } catch (error) {
-
       console.log(error);
-
     }
-
   };
 
-
-
-  // LOGOUT
   const logout = () => {
-
     localStorage.clear();
-
     window.location.href = "/";
-
   };
 
-
-
-  // SOCKET + FETCH
   useEffect(() => {
-
     fetchBatches();
 
-    // SEND ONLINE USER
-    socket.emit(
-      "user-online",
-      user?._id
-    );
+    socket.emit("user-online", user?._id);
 
-    // RECEIVE ONLINE USERS
-    socket.on(
-      "online-users",
-      (users) => {
-
-        setOnlineUsers(users);
-
-      }
-    );
+    socket.on("online-users", (users) => {
+      setOnlineUsers(users);
+    });
 
     return () => {
-
       socket.off("online-users");
-
     };
-
   }, []);
 
-
-
   return (
-
-    <div className="min-h-screen bg-black text-white p-10">
-
-      {/* TOPBAR */}
-      <div className="flex items-center justify-between mb-12">
-
-        <div>
-
-          <h1 className="text-5xl font-black bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-transparent">
-
-            codeshareX
-
-          </h1>
-
-          <p className="text-zinc-400 mt-2">
-
-            Welcome back, {user?.name}
-
-          </p>
-
-          {/* ACTIVE USERS */}
-          <div className="flex items-center gap-2 mt-3">
-
-            <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
-
-            <p className="text-green-400 font-medium">
-
-              {onlineUsers.length} Active Users
-
-            </p>
-
-          </div>
-
-        </div>
-
-
-
-        <div className="flex items-center gap-4">
-
-          {
-            user?.role ===
-              "trainer" && (
-
-              <button
-                onClick={() =>
-                  setShowModal(true)
-                }
-                className="bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-2xl flex items-center gap-2 font-semibold transition"
-              >
-
-                <Plus size={18} />
-
-                Create Batch
-
-              </button>
-
-            )
-          }
-
-
-
-          <button
-            onClick={logout}
-            className="bg-red-600 hover:bg-red-700 px-5 py-3 rounded-2xl flex items-center gap-2 font-semibold transition"
-          >
-
-            <LogOut size={18} />
-
-            Logout
-
-          </button>
-
-        </div>
-
-      </div>
-
-
-
-      {/* BATCH GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-
-        {
-          batches.map((batch) => (
-
-            <motion.div
-
-              key={batch._id}
-
-              whileHover={{
-                scale: 1.03,
-                y: -5,
-              }}
-
-              whileTap={{
-                scale: 0.98,
-              }}
-
-              onClick={() => {
-
-                const key = prompt(
-                  "Enter Batch Access Key"
-                );
-
-                if (
-                  key ===
-                  batch.accessKey
-                ) {
-
-                  navigate(
-                    `/workspace/${batch._id}`
-                  );
-
-                } else {
-
-                  alert(
-                    "Wrong Access Key"
-                  );
-
-                }
-
-              }}
-
-              className="cursor-pointer relative overflow-hidden rounded-3xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-950 p-8 hover:border-cyan-500 transition-all"
-            >
-
-              {/* GLOW */}
-              <div className="absolute -top-20 -right-20 w-40 h-40 bg-cyan-500/20 blur-3xl rounded-full" />
-
-
-
-              <div className="relative z-10">
-
-                <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-6">
-
-                  <FolderKanban
-                    size={30}
-                    className="text-cyan-400"
-                  />
-
-                </div>
-
-
-
-                <h2 className="text-3xl font-bold mb-3">
-
-                  {batch.batchName}
-
-                </h2>
-
-
-
-                <p className="text-zinc-400 leading-relaxed">
-
-                  {batch.description}
-
-                </p>
-
-
-
-                <div className="mt-8 flex items-center justify-between">
-
-                  <span className="text-sm text-zinc-500">
-
-                    Open Workspace
-
-                  </span>
-
-                  <span className="text-cyan-400">
-
-                    →
-
-                  </span>
-
-                </div>
-
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+      {/* BACKGROUND */}
+      <div className="absolute -top-40 -left-40 w-[520px] h-[520px] bg-cyan-500/10 blur-[150px] rounded-full" />
+      <div className="absolute -bottom-40 -right-40 w-[520px] h-[520px] bg-blue-600/10 blur-[150px] rounded-full" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#111_1px,transparent_1px),linear-gradient(to_bottom,#111_1px,transparent_1px)] bg-[size:70px_70px] opacity-20" />
+
+      <div className="relative z-10 px-8 py-7">
+        {/* TOP NAV */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
+                <Code2 className="text-cyan-400" size={22} />
               </div>
 
-            </motion.div>
+              <div>
+                <h1 className="text-3xl font-black tracking-tight bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                  codeshareX
+                </h1>
 
-          ))
-        }
+                <p className="text-xs text-zinc-500">
+                  Premium coding workspace for Coding Thinker students
+                </p>
+              </div>
+            </div>
+          </div>
 
-      </div>
-
-
-
-      {/* CREATE MODAL */}
-      {
-        showModal && (
-
-          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-
-            <motion.div
-
-              initial={{
-                opacity: 0,
-                scale: 0.8,
-              }}
-
-              animate={{
-                opacity: 1,
-                scale: 1,
-              }}
-
-              className="w-[450px] bg-zinc-900 border border-zinc-800 rounded-3xl p-8"
+          <div className="flex items-center gap-3">
+            <motion.button
+              whileHover={{ scale: 1.04, y: -1 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => window.open("/practice", "_blank")}
+              className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-cyan-500/30 bg-gradient-to-r from-cyan-500/10 to-blue-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-cyan-500/10"
             >
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-400/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition duration-500" />
 
-              <h2 className="text-3xl font-bold mb-6">
+              <div className="relative z-10 w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-400/20 flex items-center justify-center">
+                <Zap className="text-cyan-300" size={16} />
+              </div>
 
-                Create Batch
+              <div className="relative z-10 flex flex-col items-start">
+                <span className="text-white text-xs leading-none">
+                  Playground
+                </span>
 
+                <span className="text-zinc-400 text-[10px] mt-1">
+                  Run Code
+                </span>
+              </div>
+            </motion.button>
+
+            {user?.role === "trainer" && (
+              <button
+                onClick={() => setShowModal(true)}
+                className="bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-2xl flex items-center gap-2 text-sm font-semibold transition"
+              >
+                <Plus size={16} />
+                Batch
+              </button>
+            )}
+
+            <button
+              onClick={logout}
+              className="bg-zinc-900 hover:bg-red-600 border border-zinc-800 hover:border-red-500 px-4 py-3 rounded-2xl flex items-center gap-2 text-sm font-semibold transition"
+            >
+              <LogOut size={16} />
+              Logout
+            </button>
+          </div>
+        </div>
+
+        {/* HERO PANEL */}
+        <div className="grid grid-cols-1 xl:grid-cols-[1.6fr_1fr] gap-6 mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative overflow-hidden rounded-[32px] border border-zinc-800 bg-zinc-950/80 backdrop-blur-xl p-8"
+          >
+            <div className="absolute -right-20 -top-20 w-64 h-64 bg-cyan-500/10 blur-3xl rounded-full" />
+
+            <div className="relative z-10">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-semibold mb-5">
+                <Sparkles size={14} />
+                Welcome back, {user?.name}
+              </div>
+
+              <h2 className="text-4xl font-black tracking-tight leading-tight">
+                Learn from trainer code.
+                <br />
+                Practice inside your own compiler.
               </h2>
 
+              <p className="text-zinc-500 text-sm mt-4 max-w-2xl leading-relaxed">
+                Open your assigned batches, read structured code files, and jump into
+                the Practice Arena whenever you want to test your own logic.
+              </p>
 
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                <div className="rounded-3xl border border-zinc-800 bg-black/40 p-5">
+                  <Users className="text-green-400 mb-3" size={22} />
+                  <p className="text-2xl font-black">{onlineUsers.length}</p>
+                  <p className="text-xs text-zinc-500 mt-1">Active users</p>
+                </div>
 
-              {/* BATCH NAME */}
-              <input
-                type="text"
-                placeholder="Batch Name"
-                value={batchData.batchName}
-                onChange={(e) =>
-                  setBatchData({
-                    ...batchData,
-                    batchName:
-                      e.target.value,
-                  })
-                }
-                className="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-4 outline-none"
-              />
+                <div className="rounded-3xl border border-zinc-800 bg-black/40 p-5">
+                  <FolderKanban className="text-cyan-400 mb-3" size={22} />
+                  <p className="text-2xl font-black">{batches.length}</p>
+                  <p className="text-xs text-zinc-500 mt-1">Available batches</p>
+                </div>
 
+                <div className="rounded-3xl border border-zinc-800 bg-black/40 p-5">
+                  <Code2 className="text-blue-400 mb-3" size={22} />
+                  <p className="text-2xl font-black">Live</p>
+                  <p className="text-xs text-zinc-500 mt-1">Practice compiler</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
 
+          {/* ANNOUNCEMENTS */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="rounded-[32px] border border-zinc-800 bg-zinc-950/80 backdrop-blur-xl p-6"
+          >
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h3 className="text-lg font-bold flex items-center gap-2">
+                  <Bell size={18} className="text-cyan-400" />
+                  Announcements
+                </h3>
 
-              {/* ACCESS KEY */}
-              <input
-                type="password"
-                placeholder="Batch Access Key"
-                value={batchData.accessKey}
-                onChange={(e) =>
-                  setBatchData({
-                    ...batchData,
-                    accessKey:
-                      e.target.value,
-                  })
-                }
-                className="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-4 outline-none"
-              />
-
-
-
-              {/* DESCRIPTION */}
-              <textarea
-                placeholder="Description"
-                value={batchData.description}
-                onChange={(e) =>
-                  setBatchData({
-                    ...batchData,
-                    description:
-                      e.target.value,
-                  })
-                }
-                className="w-full p-4 rounded-2xl bg-zinc-800 border border-zinc-700 mb-6 outline-none h-32"
-              />
-
-
-
-              <div className="flex gap-4">
-
-                <button
-                  onClick={createBatch}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 p-4 rounded-2xl"
-                >
-
-                  Create
-
-                </button>
-
-
-
-                <button
-                  onClick={() =>
-                    setShowModal(false)
-                  }
-                  className="flex-1 bg-zinc-700 hover:bg-zinc-600 p-4 rounded-2xl"
-                >
-
-                  Cancel
-
-                </button>
-
+                <p className="text-xs text-zinc-500 mt-1">
+                  Latest updates for students
+                </p>
               </div>
 
-            </motion.div>
+              <span className="text-[10px] text-cyan-300 px-3 py-1 rounded-full border border-cyan-500/20 bg-cyan-500/10">
+                Live Board
+              </span>
+            </div>
 
+            <div className="space-y-3">
+              {announcements.map((item, index) => (
+                <motion.div
+                  key={index}
+                  whileHover={{ x: 4 }}
+                  className="rounded-2xl border border-zinc-800 bg-black/40 p-4"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-sm font-semibold">{item.title}</h4>
+                    <span className="text-[10px] px-2 py-1 rounded-full bg-zinc-800 text-zinc-400">
+                      {item.tag}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-zinc-500 leading-relaxed">
+                    {item.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* MAIN GRID */}
+        <div className="grid grid-cols-1 xl:grid-cols-[1.5fr_0.9fr] gap-6">
+          {/* BATCHES */}
+          <div>
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h3 className="text-xl font-bold">Your Batches</h3>
+                <p className="text-xs text-zinc-500 mt-1">
+                  Select a batch and enter access key to open workspace
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {batches.map((batch) => (
+                <motion.div
+                  key={batch._id}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  whileHover={{ scale: 1.02, y: -4 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    const key = prompt("Enter Batch Access Key");
+
+                    if (key === batch.accessKey) {
+                      navigate(`/workspace/${batch._id}`);
+                    } else {
+                      alert("Wrong Access Key");
+                    }
+                  }}
+                  className="cursor-pointer relative overflow-hidden rounded-[28px] border border-zinc-800 bg-gradient-to-br from-zinc-950 to-black p-6 hover:border-cyan-500/60 transition-all"
+                >
+                  <div className="absolute -top-16 -right-16 w-36 h-36 bg-cyan-500/10 blur-3xl rounded-full" />
+
+                  <div className="relative z-10">
+                    <div className="flex items-start justify-between">
+                      <div className="w-13 h-13 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-6">
+                        <FolderKanban size={25} className="text-cyan-400" />
+                      </div>
+
+                      <span className="text-[10px] px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-500">
+                        Workspace
+                      </span>
+                    </div>
+
+                    <h2 className="text-xl font-bold mb-2">
+                      {batch.batchName}
+                    </h2>
+
+                    <p className="text-zinc-500 text-sm leading-relaxed min-h-[45px]">
+                      {batch.description || "No description added yet."}
+                    </p>
+
+                    <div className="mt-6 flex items-center justify-between">
+                      <span className="text-xs text-zinc-500">
+                        Open secure workspace
+                      </span>
+
+                      <span className="text-cyan-400 text-lg">→</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
 
-        )
-      }
+          {/* CONTESTS */}
+          <div>
+            <div className="rounded-[32px] border border-zinc-800 bg-zinc-950/80 backdrop-blur-xl p-6">
+              <div className="flex items-center justify-between mb-5">
+                <div>
+                  <h3 className="text-lg font-bold flex items-center gap-2">
+                    <Trophy size={18} className="text-yellow-400" />
+                    Upcoming Coding Challenges
+                  </h3>
 
+                  <p className="text-xs text-zinc-500 mt-1">
+                    Practice for real contests
+                  </p>
+                </div>
+
+                <CalendarDays className="text-zinc-500" size={18} />
+              </div>
+
+              <div className="space-y-4">
+                {contests.map((contest, index) => (
+                  <motion.a
+                    key={index}
+                    href={contest.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    whileHover={{ scale: 1.02, x: 3 }}
+                    className="block rounded-3xl border border-zinc-800 bg-black/40 p-5 hover:border-cyan-500/50 transition"
+                  >
+                    <div
+                      className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${contest.color} mb-4 flex items-center justify-center text-black font-black text-xs`}
+                    >
+                      {contest.platform.slice(0, 2).toUpperCase()}
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs text-zinc-500">
+                          {contest.platform}
+                        </p>
+
+                        <h4 className="text-sm font-bold mt-1">
+                          {contest.title}
+                        </h4>
+
+                        <p className="text-xs text-zinc-500 mt-2">
+                          {contest.time}
+                        </p>
+                      </div>
+
+                      <ExternalLink className="text-zinc-500" size={16} />
+                    </div>
+                  </motion.a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CREATE MODAL */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.86, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="w-[460px] bg-zinc-950 border border-zinc-800 rounded-[32px] p-7 shadow-2xl"
+          >
+            <h2 className="text-2xl font-black mb-2">Create Batch</h2>
+
+            <p className="text-xs text-zinc-500 mb-6">
+              Add a new protected learning workspace.
+            </p>
+
+            <input
+              type="text"
+              placeholder="Batch Name"
+              value={batchData.batchName}
+              onChange={(e) =>
+                setBatchData({
+                  ...batchData,
+                  batchName: e.target.value,
+                })
+              }
+              className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 mb-4 outline-none text-sm focus:border-cyan-500"
+            />
+
+            <input
+              type="password"
+              placeholder="Batch Access Key"
+              value={batchData.accessKey}
+              onChange={(e) =>
+                setBatchData({
+                  ...batchData,
+                  accessKey: e.target.value,
+                })
+              }
+              className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 mb-4 outline-none text-sm focus:border-cyan-500"
+            />
+
+            <textarea
+              placeholder="Description"
+              value={batchData.description}
+              onChange={(e) =>
+                setBatchData({
+                  ...batchData,
+                  description: e.target.value,
+                })
+              }
+              className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 mb-6 outline-none h-28 text-sm focus:border-cyan-500"
+            />
+
+            <div className="flex gap-4">
+              <button
+                onClick={createBatch}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 p-4 rounded-2xl text-sm font-bold"
+              >
+                Create
+              </button>
+
+              <button
+                onClick={() => setShowModal(false)}
+                className="flex-1 bg-zinc-800 hover:bg-zinc-700 p-4 rounded-2xl text-sm font-bold"
+              >
+                Cancel
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
-
   );
-
 }
