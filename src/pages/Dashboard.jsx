@@ -477,7 +477,7 @@ export default function Dashboard() {
                       rel="noreferrer"
                       className="block pr-8"
                     >
-                      <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 mb-4 flex items-center justify-center text-black font-black text-xs">
+                      <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-red-400 to-orange-500 mb-4 flex items-center justify-center text-black font-black text-xs">
                         {contest.platform.slice(0, 2).toUpperCase()}
                       </div>
 
