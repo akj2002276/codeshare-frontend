@@ -13,6 +13,7 @@ import {
   ExternalLink,
   Sparkles,
   Zap,
+  Trash2,
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
@@ -24,17 +25,29 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
-
   const user = JSON.parse(localStorage.getItem("user"));
 
   const [batches, setBatches] = useState([]);
+  const [contests, setContests] = useState([]);
+
   const [showModal, setShowModal] = useState(false);
+  const [showContestModal, setShowContestModal] = useState(false);
+
   const [onlineUsers, setOnlineUsers] = useState([]);
 
   const [batchData, setBatchData] = useState({
     batchName: "",
     description: "",
     accessKey: "",
+  });
+
+  const [contestData, setContestData] = useState({
+    contestName: "",
+    batchName: "",
+    platform: "HackerRank",
+    contestLink: "",
+    contestDate: "",
+    contestTime: "",
   });
 
   const announcements = [
@@ -55,7 +68,7 @@ export default function Dashboard() {
     },
   ];
 
-  const contests = [
+  const defaultContests = [
     {
       platform: "LeetCode",
       title: "Weekly Contest",
@@ -93,6 +106,20 @@ export default function Dashboard() {
     }
   };
 
+  const fetchContests = async () => {
+    try {
+      const response = await API.get("/contests", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setContests(response.data || []);
+    } catch (error) {
+      console.log("FETCH CONTESTS ERROR:", error);
+    }
+  };
+
   const createBatch = async () => {
     try {
       const response = await API.post("/batches", batchData, {
@@ -115,6 +142,47 @@ export default function Dashboard() {
     }
   };
 
+  const createContest = async () => {
+    try {
+      const response = await API.post("/contests", contestData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setContests([response.data.contest, ...contests]);
+
+      setShowContestModal(false);
+
+      setContestData({
+        contestName: "",
+        batchName: "",
+        platform: "HackerRank",
+        contestLink: "",
+        contestDate: "",
+        contestTime: "",
+      });
+    } catch (error) {
+      alert(error?.response?.data?.message || "Failed to add contest");
+      console.log(error);
+    }
+  };
+
+  const deleteContest = async (contestId) => {
+    try {
+      await API.delete(`/contests/${contestId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setContests(contests.filter((contest) => contest._id !== contestId));
+    } catch (error) {
+      alert(error?.response?.data?.message || "Failed to delete contest");
+      console.log(error);
+    }
+  };
+
   const logout = () => {
     localStorage.clear();
     window.location.href = "/";
@@ -122,6 +190,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchBatches();
+    fetchContests();
 
     socket.emit("user-online", user?._id);
 
@@ -136,29 +205,25 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
-      {/* BACKGROUND */}
       <div className="absolute -top-40 -left-40 w-[520px] h-[520px] bg-cyan-500/10 blur-[150px] rounded-full" />
       <div className="absolute -bottom-40 -right-40 w-[520px] h-[520px] bg-blue-600/10 blur-[150px] rounded-full" />
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#111_1px,transparent_1px),linear-gradient(to_bottom,#111_1px,transparent_1px)] bg-[size:70px_70px] opacity-20" />
 
       <div className="relative z-10 px-8 py-7">
-        {/* TOP NAV */}
         <div className="flex items-center justify-between mb-8">
-          <div>
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
-                <Code2 className="text-cyan-400" size={22} />
-              </div>
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
+              <Code2 className="text-cyan-400" size={22} />
+            </div>
 
-              <div>
-                <h1 className="text-3xl font-black tracking-tight bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                  codeshareX
-                </h1>
+            <div>
+              <h1 className="text-3xl font-black tracking-tight bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                codeshareX
+              </h1>
 
-                <p className="text-xs text-zinc-500">
-                  Premium coding workspace for Coding Thinker students
-                </p>
-              </div>
+              <p className="text-xs text-zinc-500">
+                Premium coding workspace for Coding Thinker students
+              </p>
             </div>
           </div>
 
@@ -187,13 +252,23 @@ export default function Dashboard() {
             </motion.button>
 
             {user?.role === "trainer" && (
-              <button
-                onClick={() => setShowModal(true)}
-                className="bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-2xl flex items-center gap-2 text-sm font-semibold transition"
-              >
-                <Plus size={16} />
-                Batch
-              </button>
+              <>
+                <button
+                  onClick={() => setShowContestModal(true)}
+                  className="bg-yellow-500/10 hover:bg-yellow-500/20 border border-yellow-500/30 text-yellow-300 px-4 py-3 rounded-2xl flex items-center gap-2 text-sm font-semibold transition"
+                >
+                  <Trophy size={16} />
+                  Contest
+                </button>
+
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-2xl flex items-center gap-2 text-sm font-semibold transition"
+                >
+                  <Plus size={16} />
+                  Batch
+                </button>
+              </>
             )}
 
             <button
@@ -206,7 +281,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* HERO PANEL */}
         <div className="grid grid-cols-1 xl:grid-cols-[1.6fr_1fr] gap-6 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 18 }}
@@ -254,7 +328,6 @@ export default function Dashboard() {
             </div>
           </motion.div>
 
-          {/* ANNOUNCEMENTS */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -301,9 +374,7 @@ export default function Dashboard() {
           </motion.div>
         </div>
 
-        {/* MAIN GRID */}
         <div className="grid grid-cols-1 xl:grid-cols-[1.5fr_0.9fr] gap-6">
-          {/* BATCHES */}
           <div>
             <div className="flex items-center justify-between mb-5">
               <div>
@@ -367,7 +438,6 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* CONTESTS */}
           <div>
             <div className="rounded-[32px] border border-zinc-800 bg-zinc-950/80 backdrop-blur-xl p-6">
               <div className="flex items-center justify-between mb-5">
@@ -378,7 +448,7 @@ export default function Dashboard() {
                   </h3>
 
                   <p className="text-xs text-zinc-500 mt-1">
-                    Practice for real contests
+                    Trainer contests appear first
                   </p>
                 </div>
 
@@ -386,7 +456,51 @@ export default function Dashboard() {
               </div>
 
               <div className="space-y-4">
-                {contests.map((contest, index) => (
+                {contests.map((contest) => (
+                  <motion.div
+                    key={contest._id}
+                    whileHover={{ scale: 1.02, x: 3 }}
+                    className="relative rounded-3xl border border-yellow-500/20 bg-yellow-500/5 p-5 hover:border-yellow-500/50 transition"
+                  >
+                    {user?.role === "trainer" && (
+                      <button
+                        onClick={() => deleteContest(contest._id)}
+                        className="absolute top-4 right-4 text-red-400 hover:text-red-300"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    )}
+
+                    <a
+                      href={contest.contestLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block pr-8"
+                    >
+                      <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 mb-4 flex items-center justify-center text-black font-black text-xs">
+                        {contest.platform.slice(0, 2).toUpperCase()}
+                      </div>
+
+                      <p className="text-xs text-yellow-300 font-semibold">
+                        Trainer Contest
+                      </p>
+
+                      <h4 className="text-sm font-bold mt-1">
+                        {contest.contestName}
+                      </h4>
+
+                      <p className="text-xs text-zinc-500 mt-2">
+                        Batch: {contest.batchName}
+                      </p>
+
+                      <p className="text-xs text-zinc-500 mt-1">
+                        {contest.contestDate} • {contest.contestTime}
+                      </p>
+                    </a>
+                  </motion.div>
+                ))}
+
+                {defaultContests.map((contest, index) => (
                   <motion.a
                     key={index}
                     href={contest.url}
@@ -426,7 +540,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* CREATE MODAL */}
       {showModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
           <motion.div
@@ -488,6 +601,116 @@ export default function Dashboard() {
 
               <button
                 onClick={() => setShowModal(false)}
+                className="flex-1 bg-zinc-800 hover:bg-zinc-700 p-4 rounded-2xl text-sm font-bold"
+              >
+                Cancel
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {showContestModal && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.86, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="w-[500px] bg-zinc-950 border border-zinc-800 rounded-[32px] p-7 shadow-2xl"
+          >
+            <h2 className="text-2xl font-black mb-2">Add Contest</h2>
+
+            <p className="text-xs text-zinc-500 mb-6">
+              Add HackerRank, CodeChef, LeetCode or custom contest for students.
+            </p>
+
+            <input
+              type="text"
+              placeholder="Contest Name"
+              value={contestData.contestName}
+              onChange={(e) =>
+                setContestData({
+                  ...contestData,
+                  contestName: e.target.value,
+                })
+              }
+              className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 mb-4 outline-none text-sm focus:border-yellow-500"
+            />
+
+            <input
+              type="text"
+              placeholder="Batch Name"
+              value={contestData.batchName}
+              onChange={(e) =>
+                setContestData({
+                  ...contestData,
+                  batchName: e.target.value,
+                })
+              }
+              className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 mb-4 outline-none text-sm focus:border-yellow-500"
+            />
+
+            <input
+              type="text"
+              placeholder="Platform e.g. HackerRank"
+              value={contestData.platform}
+              onChange={(e) =>
+                setContestData({
+                  ...contestData,
+                  platform: e.target.value,
+                })
+              }
+              className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 mb-4 outline-none text-sm focus:border-yellow-500"
+            />
+
+            <input
+              type="text"
+              placeholder="Contest Link"
+              value={contestData.contestLink}
+              onChange={(e) =>
+                setContestData({
+                  ...contestData,
+                  contestLink: e.target.value,
+                })
+              }
+              className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 mb-4 outline-none text-sm focus:border-yellow-500"
+            />
+
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <input
+                type="date"
+                value={contestData.contestDate}
+                onChange={(e) =>
+                  setContestData({
+                    ...contestData,
+                    contestDate: e.target.value,
+                  })
+                }
+                className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 outline-none text-sm focus:border-yellow-500"
+              />
+
+              <input
+                type="time"
+                value={contestData.contestTime}
+                onChange={(e) =>
+                  setContestData({
+                    ...contestData,
+                    contestTime: e.target.value,
+                  })
+                }
+                className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 outline-none text-sm focus:border-yellow-500"
+              />
+            </div>
+
+            <div className="flex gap-4">
+              <button
+                onClick={createContest}
+                className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black p-4 rounded-2xl text-sm font-black"
+              >
+                Add Contest
+              </button>
+
+              <button
+                onClick={() => setShowContestModal(false)}
                 className="flex-1 bg-zinc-800 hover:bg-zinc-700 p-4 rounded-2xl text-sm font-bold"
               >
                 Cancel
