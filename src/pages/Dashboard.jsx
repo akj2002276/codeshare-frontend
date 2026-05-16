@@ -252,6 +252,55 @@ export default function Dashboard() {
             </motion.button>
 
             {user?.role === "trainer" && (
+  <motion.button
+    whileHover={{ scale: 1.04, y: -1 }}
+    whileTap={{ scale: 0.97 }}
+    onClick={() => window.open("/live", "_blank")}
+    className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-red-500/30 bg-gradient-to-r from-red-500/10 to-orange-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-red-500/10"
+  >
+    <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-400/10 to-orange-500/0 opacity-0 group-hover:opacity-100 transition duration-500" />
+
+    <div className="relative z-10 w-8 h-8 rounded-xl bg-red-500/20 border border-red-400/20 flex items-center justify-center">
+      <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
+    </div>
+
+    <div className="relative z-10 flex flex-col items-start">
+      <span className="text-white text-xs leading-none">
+        Live Code
+      </span>
+
+      <span className="text-zinc-400 text-[10px] mt-1">
+        Share Live
+      </span>
+    </div>
+  </motion.button>
+)}
+
+{user?.role === "student" && (
+  <motion.button
+    whileHover={{ scale: 1.04, y: -1 }}
+    whileTap={{ scale: 0.97 }}
+    onClick={() => window.open("/live", "_blank")}
+    className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-green-500/30 bg-gradient-to-r from-green-500/10 to-emerald-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-green-500/10"
+  >
+    <div className="absolute inset-0 bg-gradient-to-r from-green-500/0 via-green-400/10 to-emerald-500/0 opacity-0 group-hover:opacity-100 transition duration-500" />
+
+    <div className="relative z-10 w-8 h-8 rounded-xl bg-green-500/20 border border-green-400/20 flex items-center justify-center">
+      <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
+    </div>
+
+    <div className="relative z-10 flex flex-col items-start">
+      <span className="text-white text-xs leading-none">
+        Open Live
+      </span>
+
+      <span className="text-zinc-400 text-[10px] mt-1">
+        Watch Trainer
+      </span>
+    </div>
+  </motion.button>
+)}
+            {user?.role === "trainer" && (
               <>
                 <button
                   onClick={() => setShowContestModal(true)}

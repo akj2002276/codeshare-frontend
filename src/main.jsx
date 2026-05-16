@@ -13,45 +13,43 @@ import ReactGA from "react-ga4";
 import "./index.css";
 
 import App from "./App";
-import Dashboard from "./pages/Dashboard";
-import Workspace from "./pages/Workspace";
-import Practice from "./pages/Practice";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 
+import Dashboard from "./pages/Dashboard";
+
+import Workspace from "./pages/Workspace";
+
+import Practice from "./pages/Practice";
+
+import LiveCode from "./pages/LiveCode";
+
+import Login from "./pages/Login";
+
+import Signup from "./pages/Signup";
 
 // GOOGLE ANALYTICS INIT
 ReactGA.initialize("G-NE7QPM4WFR");
 
-
 // TRACK PAGE VIEWS
 function AnalyticsTracker() {
-
   const location = useLocation();
 
   React.useEffect(() => {
-
     ReactGA.send({
       hitType: "pageview",
       page: location.pathname,
     });
-
   }, [location]);
 
   return null;
 }
 
-
 ReactDOM.createRoot(
   document.getElementById("root")
 ).render(
-
   <BrowserRouter>
-
     <AnalyticsTracker />
 
     <Routes>
-
       <Route
         path="/"
         element={<App />}
@@ -72,6 +70,12 @@ ReactDOM.createRoot(
         element={<Practice />}
       />
 
+      {/* LIVE CODE SHARE */}
+      <Route
+        path="/live"
+        element={<LiveCode />}
+      />
+
       <Route
         path="/login"
         element={<Login />}
@@ -81,9 +85,6 @@ ReactDOM.createRoot(
         path="/signup"
         element={<Signup />}
       />
-
     </Routes>
-
   </BrowserRouter>
-
 );
