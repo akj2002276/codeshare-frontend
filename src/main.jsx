@@ -26,6 +26,10 @@ import Login from "./pages/Login";
 
 import Signup from "./pages/Signup";
 
+import DebugCode from "./pages/DebugCode";
+
+import Tickets from "./pages/Tickets";
+
 // GOOGLE ANALYTICS INIT
 ReactGA.initialize("G-NE7QPM4WFR");
 
@@ -85,6 +89,8 @@ ReactDOM.createRoot(
         path="/signup"
         element={<Signup />}
       />
+      <Route path="/debug" element={<DebugCode />} />
+      <Route path="/tickets" element={<Tickets />} />
     </Routes>
   </BrowserRouter>
 );

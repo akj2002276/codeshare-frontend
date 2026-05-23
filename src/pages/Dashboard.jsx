@@ -14,12 +14,15 @@ import {
   Sparkles,
   Zap,
   Trash2,
+  Bug,
+  TicketCheck,
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
 
 import API from "../api/axios";
 import socket from "../socket";
+
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -250,7 +253,52 @@ export default function Dashboard() {
                 </span>
               </div>
             </motion.button>
+{/* //debug my codesection  */}
+{user?.role === "student" && (
+  <motion.button
+    whileHover={{ scale: 1.04, y: -1 }}
+    whileTap={{ scale: 0.97 }}
+    onClick={() => window.open("/debug", "_blank")}
+    className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-500/10 to-pink-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-purple-500/10"
+  >
+    <div className="relative z-10 w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/20 flex items-center justify-center">
+      <Bug className="text-purple-300" size={16} />
+    </div>
 
+    <div className="relative z-10 flex flex-col items-start">
+      <span className="text-white text-xs leading-none">
+        Debug Code
+      </span>
+      <span className="text-zinc-400 text-[10px] mt-1">
+        Raise Doubt
+      </span>
+    </div>
+  </motion.button>
+)}
+
+{/* //for trainer to debug the code of student button */}
+
+{user?.role === "trainer" && (
+  <motion.button
+    whileHover={{ scale: 1.04, y: -1 }}
+    whileTap={{ scale: 0.97 }}
+    onClick={() => window.open("/tickets", "_blank")}
+    className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-500/10 to-pink-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-purple-500/10"
+  >
+    <div className="relative z-10 w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/20 flex items-center justify-center">
+      <TicketCheck className="text-purple-300" size={16} />
+    </div>
+
+    <div className="relative z-10 flex flex-col items-start">
+      <span className="text-white text-xs leading-none">
+        Active Tickets
+      </span>
+      <span className="text-zinc-400 text-[10px] mt-1">
+        Resolve Doubts
+      </span>
+    </div>
+  </motion.button>
+)}
             {user?.role === "trainer" && (
   <motion.button
     whileHover={{ scale: 1.04, y: -1 }}
