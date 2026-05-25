@@ -30,6 +30,8 @@ import DebugCode from "./pages/DebugCode";
 
 import Tickets from "./pages/Tickets";
 
+import Community from "./pages/Community";
+
 // GOOGLE ANALYTICS INIT
 ReactGA.initialize("G-NE7QPM4WFR");
 
@@ -91,6 +93,10 @@ ReactDOM.createRoot(
       />
       <Route path="/debug" element={<DebugCode />} />
       <Route path="/tickets" element={<Tickets />} />
+      <Route
+         path="/community"
+         element={<Community />}
+      />
     </Routes>
   </BrowserRouter>
 );

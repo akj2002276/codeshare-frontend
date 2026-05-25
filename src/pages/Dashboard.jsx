@@ -16,6 +16,7 @@ import {
   Trash2,
   Bug,
   TicketCheck,
+  
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
@@ -275,7 +276,34 @@ export default function Dashboard() {
     </div>
   </motion.button>
 )}
+<motion.button
+  whileHover={{ scale: 1.04, y: -1 }}
+  whileTap={{ scale: 0.97 }}
+  onClick={() => window.open("/community", "_blank")}
+  className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-cyan-500/30 bg-gradient-to-r from-cyan-500/10 to-blue-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-cyan-500/10"
+>
+  {/* GLOW */}
+  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-400/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition duration-500" />
 
+  {/* ICON */}
+  <div className="relative z-10 w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-400/20 flex items-center justify-center">
+    <Users className="text-cyan-300" size={16} />
+  </div>
+
+  {/* TEXT */}
+  <div className="relative z-10 flex flex-col items-start">
+    <span className="text-white text-xs leading-none">
+      Community
+    </span>
+
+    <span className="text-zinc-400 text-[10px] mt-1">
+      Join Chat Room
+    </span>
+  </div>
+
+  {/* NOTIFICATION BADGE */}
+  <div className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
+</motion.button>
 {/* //for trainer to debug the code of student button */}
 
 {user?.role === "trainer" && (
