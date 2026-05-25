@@ -298,7 +298,7 @@ export default function Community() {
 
               <div>
                 <h1 className="text-xl font-black bg-gradient-to-r from-cyan-300 to-blue-500 bg-clip-text text-transparent">
-                  Announcement Group
+                  coderoomX
                 </h1>
 
                 <p className="text-xs text-zinc-500">
