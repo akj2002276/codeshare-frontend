@@ -29,47 +29,52 @@ export default function CookieBanner() {
       <AnimatePresence>
         {showBanner && (
           <motion.div
-            initial={{ opacity: 0, y: 35, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 35, scale: 0.96 }}
+            initial={{ opacity: 0, y: 80 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 80 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
-            className="fixed bottom-5 left-5 z-[9999] w-[92%] max-w-[430px]"
+            className="fixed bottom-0 left-0 right-0 z-[9999] w-full"
           >
-            <div className="rounded-3xl border border-zinc-800 bg-zinc-950/95 backdrop-blur-xl shadow-2xl p-5">
-              <div className="flex items-start gap-4">
-                <motion.div
-                  animate={{ rotate: [0, 8, -8, 0] }}
-                  transition={{ duration: 2.5, repeat: Infinity }}
-                  className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0"
-                >
-                  🍪
-                </motion.div>
+            <div className="w-full border-t border-zinc-800 bg-zinc-950/95 backdrop-blur-xl shadow-2xl">
+              <div className="mx-auto max-w-7xl px-6 py-4">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div className="flex items-start gap-4">
+                    <motion.div
+                      animate={{ rotate: [0, 8, -8, 0] }}
+                      transition={{ duration: 2.5, repeat: Infinity }}
+                      className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0"
+                    >
+                      🍪
+                    </motion.div>
 
-                <div className="flex-1">
-                  <h2 className="text-sm font-black text-white">
-                    We use cookies
-                  </h2>
+                    <div>
+                      <h2 className="text-sm font-black text-white">
+                        We use cookies
+                      </h2>
 
-                  <p className="text-xs text-zinc-400 leading-relaxed mt-1">
-                    We use cookies to keep you logged in, improve your
-                    experience, and understand platform usage.
-                  </p>
+                      <p className="text-xs text-zinc-400 leading-relaxed mt-1 max-w-3xl">
+                        We use cookies to keep you logged in, improve your
+                        experience, and understand platform usage. You can
+                        accept all cookies or manage your preferences.
+                      </p>
+                    </div>
+                  </div>
 
-                  <div className="flex items-center gap-2 mt-4">
+                  <div className="flex items-center gap-3 shrink-0">
                     <button
                       onClick={() => setShowManage(true)}
-                      className="px-4 py-2 rounded-xl bg-white-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-bold flex items-center gap-2"
+                      className="px-5 py-2.5 rounded-xl bg-white hover:bg-zinc-200 text-black border border-white text-xs font-black flex items-center gap-2 transition"
                     >
                       <FiSettings size={13} />
-                      Manage
+                      Manage Cookies
                     </button>
 
                     <button
                       onClick={acceptAllCookies}
-                      className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-black text-xs font-black flex items-center gap-2"
+                      className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-black text-xs font-black flex items-center gap-2 transition"
                     >
                       <FiCheck size={13} />
-                      Accept
+                      Accept All
                     </button>
                   </div>
                 </div>
@@ -102,7 +107,7 @@ export default function CookieBanner() {
 
                 <button
                   onClick={() => setShowManage(false)}
-                  className="w-9 h-9 rounded-xl hover:bg-zinc-800 flex items-center justify-center"
+                  className="w-9 h-9 rounded-xl hover:bg-zinc-800 flex items-center justify-center text-white"
                 >
                   <FiX />
                 </button>
