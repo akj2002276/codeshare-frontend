@@ -32,8 +32,15 @@ import Tickets from "./pages/Tickets";
 
 import Community from "./pages/Community";
 
+import CookieBanner from "./components/CookieBanner";
 // GOOGLE ANALYTICS INIT
-ReactGA.initialize("G-NE7QPM4WFR");
+// ReactGA.initialize("G-NE7QPM4WFR");
+const analyticsConsent =
+  localStorage.getItem("analyticsCookies");
+
+if (analyticsConsent === "true") {
+  ReactGA.initialize("G-NE7QPM4WFR");
+}
 
 // TRACK PAGE VIEWS
 function AnalyticsTracker() {
@@ -54,7 +61,7 @@ ReactDOM.createRoot(
 ).render(
   <BrowserRouter>
     <AnalyticsTracker />
-
+    <CookieBanner />
     <Routes>
       <Route
         path="/"
