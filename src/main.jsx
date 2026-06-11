@@ -33,6 +33,9 @@ import Tickets from "./pages/Tickets";
 import Community from "./pages/Community";
 
 import CookieBanner from "./components/CookieBanner";
+import CompleteProfile from "./pages/CompleteProfile";
+import MyProfile from "./pages/MyProfile";
+import Leaderboard from "./pages/Leaderboard";
 // GOOGLE ANALYTICS INIT
 // ReactGA.initialize("G-NE7QPM4WFR");
 const analyticsConsent =
@@ -103,6 +106,19 @@ ReactDOM.createRoot(
       <Route
          path="/community"
          element={<Community />}
+      />
+      <Route
+         path="/complete-profile"
+         element={<CompleteProfile />}
+      />
+
+      <Route
+        path="/profile"
+        element={<MyProfile />}
+      />
+      <Route
+        path="/leaderboard"
+        element={<Leaderboard />}
       />
     </Routes>
   </BrowserRouter>

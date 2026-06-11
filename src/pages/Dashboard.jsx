@@ -16,14 +16,16 @@ import {
   Trash2,
   Bug,
   TicketCheck,
-  
+  UserCircle,
+  CheckCircle,
+  Crown,
+  Medal,
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
 
 import API from "../api/axios";
 import socket from "../socket";
-
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -38,6 +40,12 @@ export default function Dashboard() {
   const [showContestModal, setShowContestModal] = useState(false);
 
   const [onlineUsers, setOnlineUsers] = useState([]);
+
+  const [profileCompleted, setProfileCompleted] = useState(false);
+  const [profile, setProfile] = useState(null);
+
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [myRank, setMyRank] = useState(null);
 
   const [batchData, setBatchData] = useState({
     batchName: "",
@@ -124,6 +132,43 @@ export default function Dashboard() {
     }
   };
 
+  const fetchProfile = async () => {
+    try {
+      const response = await API.get("/profile/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setProfileCompleted(response.data.profileCompleted);
+      setProfile(response.data.profile);
+    } catch (error) {
+      console.log("FETCH PROFILE ERROR:", error);
+    }
+  };
+
+  const fetchLeaderboard = async () => {
+    try {
+      const response = await API.get("/leaderboard", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = response.data || [];
+
+      setLeaderboard(data);
+
+      const currentUser = data.find(
+        (student) => student.email === user?.email
+      );
+
+      setMyRank(currentUser || null);
+    } catch (error) {
+      console.log("LEADERBOARD ERROR:", error);
+    }
+  };
+
   const createBatch = async () => {
     try {
       const response = await API.post("/batches", batchData, {
@@ -195,6 +240,8 @@ export default function Dashboard() {
   useEffect(() => {
     fetchBatches();
     fetchContests();
+    fetchProfile();
+    fetchLeaderboard();
 
     socket.emit("user-online", user?._id);
 
@@ -231,7 +278,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap justify-end">
             <motion.button
               whileHover={{ scale: 1.04, y: -1 }}
               whileTap={{ scale: 0.97 }}
@@ -254,128 +301,170 @@ export default function Dashboard() {
                 </span>
               </div>
             </motion.button>
-{/* //debug my codesection  */}
-{user?.role === "student" && (
-  <motion.button
-    whileHover={{ scale: 1.04, y: -1 }}
-    whileTap={{ scale: 0.97 }}
-    onClick={() => window.open("/debug", "_blank")}
-    className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-500/10 to-pink-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-purple-500/10"
-  >
-    <div className="relative z-10 w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/20 flex items-center justify-center">
-      <Bug className="text-purple-300" size={16} />
-    </div>
 
-    <div className="relative z-10 flex flex-col items-start">
-      <span className="text-white text-xs leading-none">
-        Debug Code
-      </span>
-      <span className="text-zinc-400 text-[10px] mt-1">
-        Raise Doubt
-      </span>
-    </div>
-  </motion.button>
-)}
-<motion.button
-  whileHover={{ scale: 1.04, y: -1 }}
-  whileTap={{ scale: 0.97 }}
-  onClick={() => window.open("/community", "_blank")}
-  className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-cyan-500/30 bg-gradient-to-r from-cyan-500/10 to-blue-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-cyan-500/10"
->
-  {/* GLOW */}
-  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-400/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition duration-500" />
+            <motion.button
+              whileHover={{ scale: 1.04, y: -1 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => navigate("/profile")}
+              className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-blue-500/30 bg-gradient-to-r from-blue-500/10 to-cyan-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-blue-500/10"
+            >
+              <div className="relative z-10 w-8 h-8 rounded-xl bg-blue-500/20 border border-blue-400/20 flex items-center justify-center">
+                <UserCircle className="text-blue-300" size={16} />
+              </div>
 
-  {/* ICON */}
-  <div className="relative z-10 w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-400/20 flex items-center justify-center">
-    <Users className="text-cyan-300" size={16} />
-  </div>
+              <div className="relative z-10 flex flex-col items-start">
+                <span className="text-white text-xs leading-none">
+                  Profile
+                </span>
 
-  {/* TEXT */}
-  <div className="relative z-10 flex flex-col items-start">
-    <span className="text-white text-xs leading-none">
-      Community
-    </span>
+                <span className="text-zinc-400 text-[10px] mt-1">
+                  Coding Identity
+                </span>
+              </div>
+            </motion.button>
 
-    <span className="text-zinc-400 text-[10px] mt-1">
-      Join Chat Room
-    </span>
-  </div>
+            <motion.button
+              whileHover={{ scale: 1.04, y: -1 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => navigate("/leaderboard")}
+              className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-yellow-500/30 bg-gradient-to-r from-yellow-500/10 to-orange-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-yellow-500/10"
+            >
+              <div className="relative z-10 w-8 h-8 rounded-xl bg-yellow-500/20 border border-yellow-400/20 flex items-center justify-center">
+                <Trophy className="text-yellow-300" size={16} />
+              </div>
 
-  {/* NOTIFICATION BADGE */}
-  <div className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
-</motion.button>
-{/* //for trainer to debug the code of student button */}
+              <div className="relative z-10 flex flex-col items-start">
+                <span className="text-white text-xs leading-none">
+                  Leaderboard
+                </span>
 
-{user?.role === "trainer" && (
-  <motion.button
-    whileHover={{ scale: 1.04, y: -1 }}
-    whileTap={{ scale: 0.97 }}
-    onClick={() => window.open("/tickets", "_blank")}
-    className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-500/10 to-pink-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-purple-500/10"
-  >
-    <div className="relative z-10 w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/20 flex items-center justify-center">
-      <TicketCheck className="text-purple-300" size={16} />
-    </div>
+                <span className="text-zinc-400 text-[10px] mt-1">
+                  Rankings
+                </span>
+              </div>
+            </motion.button>
 
-    <div className="relative z-10 flex flex-col items-start">
-      <span className="text-white text-xs leading-none">
-        Active Tickets
-      </span>
-      <span className="text-zinc-400 text-[10px] mt-1">
-        Resolve Doubts
-      </span>
-    </div>
-  </motion.button>
-)}
+            {user?.role === "student" && (
+              <motion.button
+                whileHover={{ scale: 1.04, y: -1 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => window.open("/debug", "_blank")}
+                className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-500/10 to-pink-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-purple-500/10"
+              >
+                <div className="relative z-10 w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/20 flex items-center justify-center">
+                  <Bug className="text-purple-300" size={16} />
+                </div>
+
+                <div className="relative z-10 flex flex-col items-start">
+                  <span className="text-white text-xs leading-none">
+                    Debug Code
+                  </span>
+
+                  <span className="text-zinc-400 text-[10px] mt-1">
+                    Raise Doubt
+                  </span>
+                </div>
+              </motion.button>
+            )}
+
+            <motion.button
+              whileHover={{ scale: 1.04, y: -1 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => window.open("/community", "_blank")}
+              className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-cyan-500/30 bg-gradient-to-r from-cyan-500/10 to-blue-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-cyan-500/10"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-400/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition duration-500" />
+
+              <div className="relative z-10 w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-400/20 flex items-center justify-center">
+                <Users className="text-cyan-300" size={16} />
+              </div>
+
+              <div className="relative z-10 flex flex-col items-start">
+                <span className="text-white text-xs leading-none">
+                  Community
+                </span>
+
+                <span className="text-zinc-400 text-[10px] mt-1">
+                  Join Chat Room
+                </span>
+              </div>
+
+              <div className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
+            </motion.button>
+
             {user?.role === "trainer" && (
-  <motion.button
-    whileHover={{ scale: 1.04, y: -1 }}
-    whileTap={{ scale: 0.97 }}
-    onClick={() => window.open("/live", "_blank")}
-    className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-red-500/30 bg-gradient-to-r from-red-500/10 to-orange-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-red-500/10"
-  >
-    <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-400/10 to-orange-500/0 opacity-0 group-hover:opacity-100 transition duration-500" />
+              <motion.button
+                whileHover={{ scale: 1.04, y: -1 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => window.open("/tickets", "_blank")}
+                className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-500/10 to-pink-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-purple-500/10"
+              >
+                <div className="relative z-10 w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/20 flex items-center justify-center">
+                  <TicketCheck className="text-purple-300" size={16} />
+                </div>
 
-    <div className="relative z-10 w-8 h-8 rounded-xl bg-red-500/20 border border-red-400/20 flex items-center justify-center">
-      <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-    </div>
+                <div className="relative z-10 flex flex-col items-start">
+                  <span className="text-white text-xs leading-none">
+                    Active Tickets
+                  </span>
 
-    <div className="relative z-10 flex flex-col items-start">
-      <span className="text-white text-xs leading-none">
-        Live Code
-      </span>
+                  <span className="text-zinc-400 text-[10px] mt-1">
+                    Resolve Doubts
+                  </span>
+                </div>
+              </motion.button>
+            )}
 
-      <span className="text-zinc-400 text-[10px] mt-1">
-        Share Live
-      </span>
-    </div>
-  </motion.button>
-)}
+            {user?.role === "trainer" && (
+              <motion.button
+                whileHover={{ scale: 1.04, y: -1 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => window.open("/live", "_blank")}
+                className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-red-500/30 bg-gradient-to-r from-red-500/10 to-orange-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-red-500/10"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-400/10 to-orange-500/0 opacity-0 group-hover:opacity-100 transition duration-500" />
 
-{user?.role === "student" && (
-  <motion.button
-    whileHover={{ scale: 1.04, y: -1 }}
-    whileTap={{ scale: 0.97 }}
-    onClick={() => window.open("/live", "_blank")}
-    className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-green-500/30 bg-gradient-to-r from-green-500/10 to-emerald-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-green-500/10"
-  >
-    <div className="absolute inset-0 bg-gradient-to-r from-green-500/0 via-green-400/10 to-emerald-500/0 opacity-0 group-hover:opacity-100 transition duration-500" />
+                <div className="relative z-10 w-8 h-8 rounded-xl bg-red-500/20 border border-red-400/20 flex items-center justify-center">
+                  <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
+                </div>
 
-    <div className="relative z-10 w-8 h-8 rounded-xl bg-green-500/20 border border-green-400/20 flex items-center justify-center">
-      <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
-    </div>
+                <div className="relative z-10 flex flex-col items-start">
+                  <span className="text-white text-xs leading-none">
+                    Live Code
+                  </span>
 
-    <div className="relative z-10 flex flex-col items-start">
-      <span className="text-white text-xs leading-none">
-        Open Live
-      </span>
+                  <span className="text-zinc-400 text-[10px] mt-1">
+                    Share Live
+                  </span>
+                </div>
+              </motion.button>
+            )}
 
-      <span className="text-zinc-400 text-[10px] mt-1">
-        Watch Trainer
-      </span>
-    </div>
-  </motion.button>
-)}
+            {user?.role === "student" && (
+              <motion.button
+                whileHover={{ scale: 1.04, y: -1 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => window.open("/live", "_blank")}
+                className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-green-500/30 bg-gradient-to-r from-green-500/10 to-emerald-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-green-500/10"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-green-500/0 via-green-400/10 to-emerald-500/0 opacity-0 group-hover:opacity-100 transition duration-500" />
+
+                <div className="relative z-10 w-8 h-8 rounded-xl bg-green-500/20 border border-green-400/20 flex items-center justify-center">
+                  <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
+                </div>
+
+                <div className="relative z-10 flex flex-col items-start">
+                  <span className="text-white text-xs leading-none">
+                    Open Live
+                  </span>
+
+                  <span className="text-zinc-400 text-[10px] mt-1">
+                    Watch Trainer
+                  </span>
+                </div>
+              </motion.button>
+            )}
+
             {user?.role === "trainer" && (
               <>
                 <button
@@ -404,6 +493,191 @@ export default function Dashboard() {
               Logout
             </button>
           </div>
+        </div>
+
+        {user?.role === "student" && !profileCompleted && (
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 relative overflow-hidden rounded-[32px] border border-cyan-500/20 bg-gradient-to-r from-cyan-500/10 to-blue-600/10 backdrop-blur-xl p-6 shadow-2xl shadow-cyan-500/10"
+          >
+            <div className="absolute -top-20 -right-20 w-64 h-64 bg-cyan-500/20 blur-3xl rounded-full" />
+
+            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+              <div className="flex items-start gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
+                  <UserCircle className="text-cyan-400" size={26} />
+                </div>
+
+                <div>
+                  <h2 className="text-2xl font-black">
+                    Complete Your Coding Profile
+                  </h2>
+
+                  <p className="text-sm text-zinc-400 mt-2 max-w-2xl leading-relaxed">
+                    Add your LeetCode, CodeChef, GitHub and LinkedIn profiles.
+                    This will unlock your student profile and future leaderboard ranking.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => navigate("/complete-profile")}
+                className="px-7 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 text-sm font-black shadow-xl shadow-cyan-500/20"
+              >
+                Complete Now
+              </button>
+            </div>
+          </motion.div>
+        )}
+
+        {user?.role === "student" && profileCompleted && (
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 relative overflow-hidden rounded-[32px] border border-green-500/20 bg-green-500/5 backdrop-blur-xl p-6"
+          >
+            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+              <div className="flex items-start gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                  <CheckCircle className="text-green-400" size={26} />
+                </div>
+
+                <div>
+                  <h2 className="text-2xl font-black">
+                    Your Coding Profile is Ready
+                  </h2>
+
+                  <p className="text-sm text-zinc-400 mt-2 max-w-2xl leading-relaxed">
+                    {profile?.college || "College not added"} •{" "}
+                    {profile?.batch || "Batch not added"} • LeetCode, GitHub and LinkedIn connected.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => navigate("/profile")}
+                className="px-7 py-4 rounded-2xl bg-green-600 hover:bg-green-700 text-sm font-black"
+              >
+                View Profile
+              </button>
+            </div>
+          </motion.div>
+        )}
+
+        <div className="grid grid-cols-1 xl:grid-cols-[0.8fr_1.2fr] gap-6 mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative overflow-hidden rounded-[32px] border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-orange-500/5 backdrop-blur-xl p-6"
+          >
+            <div className="absolute -top-20 -right-20 w-60 h-60 bg-yellow-500/20 blur-3xl rounded-full" />
+
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-14 h-14 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">
+                  <Crown className="text-yellow-300" size={28} />
+                </div>
+
+                <div>
+                  <h2 className="text-xl font-black">Your Rank</h2>
+
+                  <p className="text-xs text-zinc-500">
+                    LeetCode Leaderboard
+                  </p>
+                </div>
+              </div>
+
+              <h1 className="text-7xl font-black text-yellow-300">
+                {myRank ? `#${myRank.rank}` : "--"}
+              </h1>
+
+              <p className="text-zinc-400 mt-3">
+                {myRank
+                  ? `${myRank.leetcodeTotalSolved || 0} Problems Solved`
+                  : "Sync your LeetCode profile"}
+              </p>
+
+              <button
+                onClick={() => navigate("/leaderboard")}
+                className="mt-6 w-full bg-yellow-500 hover:bg-yellow-600 text-black p-4 rounded-2xl font-black"
+              >
+                View Full Rankings
+              </button>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-[32px] border border-zinc-800 bg-zinc-950/80 backdrop-blur-xl p-6"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl font-black">Top 5 Students</h2>
+
+                <p className="text-xs text-zinc-500">
+                  Live leaderboard
+                </p>
+              </div>
+
+              <Medal className="text-yellow-400" />
+            </div>
+
+            <div className="space-y-3">
+              {leaderboard.slice(0, 5).map((student) => (
+                <motion.div
+                  key={student._id}
+                  whileHover={{ scale: 1.02, x: 4 }}
+                  className={`rounded-2xl p-4 border ${
+                    student.email === user?.email
+                      ? "border-cyan-500/40 bg-cyan-500/10"
+                      : "border-zinc-800 bg-black/40"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center font-black ${
+                          student.rank === 1
+                            ? "bg-yellow-500 text-black"
+                            : student.rank === 2
+                            ? "bg-zinc-300 text-black"
+                            : student.rank === 3
+                            ? "bg-orange-500 text-black"
+                            : "bg-zinc-900 text-zinc-400 border border-zinc-800"
+                        }`}
+                      >
+                        #{student.rank}
+                      </div>
+
+                      <div>
+                        <h3 className="font-bold">{student.name}</h3>
+
+                        <p className="text-xs text-zinc-500">
+                          {student.college || "Student"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="text-right">
+                      <p className="text-xl font-black text-cyan-400">
+                        {student.leetcodeTotalSolved || 0}
+                      </p>
+
+                      <p className="text-[10px] text-zinc-500">solved</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+
+              {leaderboard.length === 0 && (
+                <p className="text-sm text-zinc-600 text-center py-8">
+                  No leaderboard data yet
+                </p>
+              )}
+            </div>
+          </motion.div>
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-[1.6fr_1fr] gap-6 mb-8">
