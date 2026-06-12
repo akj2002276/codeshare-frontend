@@ -8,6 +8,7 @@ import {
   ExternalLink,
   RefreshCcw,
   ArrowLeft,
+  Clock3,
 } from "lucide-react";
 
 import {
@@ -25,6 +26,7 @@ export default function Leaderboard() {
   const user = JSON.parse(localStorage.getItem("user"));
 
   const [leaderboard, setLeaderboard] = useState([]);
+  const [lastUpdatedAt, setLastUpdatedAt] = useState(null);
   const [loading, setLoading] = useState(false);
   const [syncingAll, setSyncingAll] = useState(false);
 
@@ -38,7 +40,8 @@ export default function Leaderboard() {
         },
       });
 
-      setLeaderboard(res.data || []);
+      setLeaderboard(res.data.leaderboard || []);
+      setLastUpdatedAt(res.data.lastUpdatedAt || null);
     } catch (error) {
       alert(error?.response?.data?.message || "Failed to fetch leaderboard");
       console.log(error);
@@ -67,6 +70,8 @@ export default function Leaderboard() {
         }
       );
 
+      setLastUpdatedAt(res.data.lastUpdatedAt || new Date().toISOString());
+
       alert(
         `Leaderboard updated.\nUpdated: ${res.data.updated}\nFailed: ${res.data.failed}`
       );
@@ -78,6 +83,19 @@ export default function Leaderboard() {
     } finally {
       setSyncingAll(false);
     }
+  };
+
+  const formatDateTime = (dateValue) => {
+    if (!dateValue) return "Not updated yet";
+
+    return new Date(dateValue).toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
   };
 
   useEffect(() => {
@@ -112,6 +130,18 @@ export default function Leaderboard() {
             <p className="text-sm text-zinc-500 mt-2">
               Rankings based on synced LeetCode solved problems.
             </p>
+
+            <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-2xl border border-cyan-500/20 bg-cyan-500/10">
+              <Clock3 size={15} className="text-cyan-400" />
+
+              <span className="text-xs text-zinc-400">
+                Last Updated:
+              </span>
+
+              <span className="text-xs font-black text-cyan-300">
+                {formatDateTime(lastUpdatedAt)}
+              </span>
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
@@ -178,6 +208,16 @@ export default function Leaderboard() {
               <p className="text-xs text-zinc-500 mt-1">
                 Students on leaderboard
               </p>
+
+              <div className="mt-4 pt-4 border-t border-zinc-800">
+                <p className="text-[10px] text-zinc-500">
+                  Last Updated
+                </p>
+
+                <p className="text-xs text-cyan-300 font-bold mt-1">
+                  {formatDateTime(lastUpdatedAt)}
+                </p>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -220,7 +260,7 @@ export default function Leaderboard() {
                 </h2>
 
                 <p className="text-xs text-zinc-500 mt-1">
-                  Updated after students sync their LeetCode stats.
+                  Last updated: {formatDateTime(lastUpdatedAt)}
                 </p>
               </div>
 

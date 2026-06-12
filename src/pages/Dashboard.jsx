@@ -155,7 +155,7 @@ export default function Dashboard() {
         },
       });
 
-      const data = response.data || [];
+      const data = response.data.leaderboard || [];
 
       setLeaderboard(data);
 
