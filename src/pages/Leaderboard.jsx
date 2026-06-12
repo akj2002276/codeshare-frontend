@@ -5,7 +5,6 @@ import {
   Trophy,
   Medal,
   Crown,
-  Code2,
   ExternalLink,
   RefreshCcw,
   ArrowLeft,
@@ -23,9 +22,11 @@ export default function Leaderboard() {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [syncingAll, setSyncingAll] = useState(false);
 
   const fetchLeaderboard = async () => {
     try {
@@ -43,6 +44,39 @@ export default function Leaderboard() {
       console.log(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const syncAllLeaderboard = async () => {
+    try {
+      const confirmSync = window.confirm(
+        "This will sync LeetCode stats for all students. Continue?"
+      );
+
+      if (!confirmSync) return;
+
+      setSyncingAll(true);
+
+      const res = await API.post(
+        "/leaderboard/sync-all",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert(
+        `Leaderboard updated.\nUpdated: ${res.data.updated}\nFailed: ${res.data.failed}`
+      );
+
+      fetchLeaderboard();
+    } catch (error) {
+      alert(error?.response?.data?.message || "Failed to update leaderboard");
+      console.log(error);
+    } finally {
+      setSyncingAll(false);
     }
   };
 
@@ -80,14 +114,27 @@ export default function Leaderboard() {
             </p>
           </div>
 
-          <button
-            onClick={fetchLeaderboard}
-            disabled={loading}
-            className="px-5 py-3 rounded-2xl bg-yellow-500 hover:bg-yellow-600 text-black text-sm font-black flex items-center gap-2 disabled:opacity-50"
-          >
-            <RefreshCcw size={16} />
-            {loading ? "Refreshing..." : "Refresh"}
-          </button>
+          <div className="flex items-center gap-3">
+            {user?.role === "trainer" && (
+              <button
+                onClick={syncAllLeaderboard}
+                disabled={syncingAll}
+                className="px-5 py-3 rounded-2xl bg-cyan-500 hover:bg-cyan-600 text-black text-sm font-black flex items-center gap-2 disabled:opacity-50"
+              >
+                <RefreshCcw size={16} />
+                {syncingAll ? "Updating..." : "Update Leaderboard"}
+              </button>
+            )}
+
+            <button
+              onClick={fetchLeaderboard}
+              disabled={loading}
+              className="px-5 py-3 rounded-2xl bg-yellow-500 hover:bg-yellow-600 text-black text-sm font-black flex items-center gap-2 disabled:opacity-50"
+            >
+              <RefreshCcw size={16} />
+              {loading ? "Refreshing..." : "Refresh"}
+            </button>
+          </div>
         </div>
 
         {/* HERO */}
