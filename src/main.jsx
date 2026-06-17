@@ -36,6 +36,7 @@ import CookieBanner from "./components/CookieBanner";
 import CompleteProfile from "./pages/CompleteProfile";
 import MyProfile from "./pages/MyProfile";
 import Leaderboard from "./pages/Leaderboard";
+import PublicProfile from "./pages/PublicProfile";
 // GOOGLE ANALYTICS INIT
 // ReactGA.initialize("G-NE7QPM4WFR");
 const analyticsConsent =
@@ -119,6 +120,10 @@ ReactDOM.createRoot(
       <Route
         path="/leaderboard"
         element={<Leaderboard />}
+      />
+      <Route
+        path="/profile/:userId"
+        element={<PublicProfile />}
       />
     </Routes>
   </BrowserRouter>

@@ -39,7 +39,7 @@ export default function Leaderboard() {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      console.log("LEADERBOARD RESPONSE", res.data);
       setLeaderboard(res.data.leaderboard || []);
       setLastUpdatedAt(res.data.lastUpdatedAt || null);
     } catch (error) {
@@ -85,6 +85,21 @@ export default function Leaderboard() {
     }
   };
 
+  const openPublicProfile = (student) => {
+    console.log("CLICKED STUDENT", student);
+  const profileId =
+    student?.user?._id ||
+    student?.user ||
+    student?._id;
+
+  if (!profileId) {
+    alert("Profile link not available");
+    return;
+  }
+
+  navigate(`/profile/${profileId}`);
+  };
+
   const formatDateTime = (dateValue) => {
     if (!dateValue) return "Not updated yet";
 
@@ -112,7 +127,6 @@ export default function Leaderboard() {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#111_1px,transparent_1px),linear-gradient(to_bottom,#111_1px,transparent_1px)] bg-[size:70px_70px] opacity-20" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-8">
-        {/* TOPBAR */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <button
@@ -167,7 +181,6 @@ export default function Leaderboard() {
           </div>
         </div>
 
-        {/* HERO */}
         <motion.div
           initial={{
             opacity: 0,
@@ -196,7 +209,8 @@ export default function Leaderboard() {
 
               <p className="text-sm text-zinc-500 mt-4 max-w-2xl leading-relaxed">
                 Students are ranked by total LeetCode solved count. Hard and
-                medium problems are used as tie breakers.
+                medium problems are used as tie breakers. Click any student to
+                open their public profile.
               </p>
             </div>
 
@@ -222,7 +236,6 @@ export default function Leaderboard() {
           </div>
         </motion.div>
 
-        {/* EMPTY */}
         {leaderboard.length === 0 && (
           <div className="rounded-[36px] border border-zinc-800 bg-zinc-950/80 p-10 text-center">
             <Trophy className="mx-auto text-zinc-600 mb-4" size={42} />
@@ -237,7 +250,6 @@ export default function Leaderboard() {
           </div>
         )}
 
-        {/* TOP 3 */}
         {topThree.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
             {topThree.map((student, index) => (
@@ -245,12 +257,12 @@ export default function Leaderboard() {
                 key={student._id}
                 student={student}
                 index={index}
+                onClick={() => openPublicProfile(student)}
               />
             ))}
           </div>
         )}
 
-        {/* TABLE */}
         {others.length > 0 && (
           <div className="rounded-[36px] border border-zinc-800 bg-zinc-950/80 backdrop-blur-xl overflow-hidden">
             <div className="p-5 border-b border-zinc-800 flex items-center justify-between">
@@ -271,17 +283,18 @@ export default function Leaderboard() {
               {others.map((student) => (
                 <motion.div
                   key={student._id}
+                  onClick={() => openPublicProfile(student)}
                   whileHover={{
                     backgroundColor: "rgba(39,39,42,0.35)",
                   }}
-                  className="grid grid-cols-[80px_1.4fr_1fr_1fr_140px] gap-4 items-center px-5 py-4"
+                  className="cursor-pointer grid grid-cols-[80px_1.4fr_1fr_1fr_140px] gap-4 items-center px-5 py-4"
                 >
                   <div className="text-2xl font-black text-zinc-500">
                     #{student.rank}
                   </div>
 
                   <div>
-                    <h3 className="font-black">
+                    <h3 className="font-black hover:text-cyan-300 transition">
                       {student.name}
                     </h3>
 
@@ -307,7 +320,10 @@ export default function Leaderboard() {
                     <StatPill label="H" value={student.leetcodeHardSolved} />
                   </div>
 
-                  <div className="flex justify-end gap-2">
+                  <div
+                    className="flex justify-end gap-2"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     {student.githubUrl && (
                       <a
                         href={student.githubUrl}
@@ -351,7 +367,11 @@ export default function Leaderboard() {
   );
 }
 
-function TopRankCard({ student, index }) {
+function TopRankCard({
+  student,
+  index,
+  onClick,
+}) {
   const colors = [
     {
       border: "border-yellow-500/30",
@@ -377,6 +397,7 @@ function TopRankCard({ student, index }) {
 
   return (
     <motion.div
+      onClick={onClick}
       initial={{
         opacity: 0,
         y: 18,
@@ -394,7 +415,7 @@ function TopRankCard({ student, index }) {
         scale: 1.03,
         y: -6,
       }}
-      className={`relative overflow-hidden rounded-[36px] border ${item.border} bg-gradient-to-br ${item.bg} backdrop-blur-xl p-6 shadow-2xl`}
+      className={`cursor-pointer relative overflow-hidden rounded-[36px] border ${item.border} bg-gradient-to-br ${item.bg} backdrop-blur-xl p-6 shadow-2xl`}
     >
       <div className="absolute -top-20 -right-20 w-52 h-52 bg-yellow-500/10 blur-3xl rounded-full" />
 
@@ -419,7 +440,7 @@ function TopRankCard({ student, index }) {
           {item.title}
         </p>
 
-        <h3 className="text-2xl font-black">
+        <h3 className="text-2xl font-black hover:text-cyan-300 transition">
           {student.name}
         </h3>
 
@@ -443,7 +464,10 @@ function TopRankCard({ student, index }) {
           </div>
         </div>
 
-        <div className="flex gap-2 mt-5">
+        <div
+          className="flex gap-2 mt-5"
+          onClick={(e) => e.stopPropagation()}
+        >
           {student.githubUrl && (
             <a
               href={student.githubUrl}
