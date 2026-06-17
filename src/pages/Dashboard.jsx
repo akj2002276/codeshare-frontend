@@ -255,277 +255,207 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden">
-      <div className="absolute -top-40 -left-40 w-[520px] h-[520px] bg-cyan-500/10 blur-[150px] rounded-full" />
-      <div className="absolute -bottom-40 -right-40 w-[520px] h-[520px] bg-blue-600/10 blur-[150px] rounded-full" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#111_1px,transparent_1px),linear-gradient(to_bottom,#111_1px,transparent_1px)] bg-[size:70px_70px] opacity-20" />
+    <div className="min-h-screen bg-[#04040a] text-white relative overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(0,212,170,0.18),transparent_28%),radial-gradient(circle_at_80%_18%,rgba(108,99,255,0.18),transparent_30%),radial-gradient(circle_at_50%_100%,rgba(245,166,35,0.14),transparent_35%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,212,170,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,212,170,0.06)_1px,transparent_1px)] bg-[size:44px_44px] opacity-30" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,rgba(0,212,170,0.05)_50%,transparent_100%)]" />
+        <div className="absolute inset-0 bg-[repeating-linear-gradient(to_bottom,rgba(255,255,255,0.035)_0px,rgba(255,255,255,0.035)_1px,transparent_1px,transparent_6px)] opacity-20" />
+      </div>
 
-      <div className="relative z-10 px-8 py-7">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
-              <Code2 className="text-cyan-400" size={22} />
-            </div>
+      <div className="relative z-10 max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-5">
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="sticky top-4 z-40 mb-6"
+        >
+          <div className="relative overflow-hidden rounded-[28px] border border-[#00d4aa]/20 bg-[#070711]/90 backdrop-blur-2xl shadow-2xl shadow-[#00d4aa]/10">
+            <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#00d4aa]/80 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#00d4aa]/8 via-transparent to-[#6c63ff]/10" />
 
-            <div>
-              <h1 className="text-3xl font-black tracking-tight bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                codeshareX
-              </h1>
+            <div className="relative px-5 py-4 flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-4">
+              <div className="flex items-center justify-between gap-5">
+                <div className="flex items-center gap-4">
+                  <div className="relative">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#00d4aa] to-[#6c63ff] blur-xl opacity-60 animate-pulse" />
+                    <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-[#6c63ff] to-[#00d4aa] flex items-center justify-center shadow-xl shadow-[#6c63ff]/30">
+                      <Code2 className="text-white" size={26} />
+                    </div>
+                  </div>
 
-              <p className="text-xs text-zinc-500">
-                Premium coding workspace for Coding Thinker students
-              </p>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h1 className="text-2xl lg:text-3xl font-black tracking-tight">
+                        codeshare<span className="text-[#00d4aa]">X</span>
+                      </h1>
+                      <span className="hidden sm:inline-flex text-[10px] px-2 py-1 rounded-full border border-[#00d4aa]/20 bg-[#00d4aa]/10 text-[#00d4aa] font-black">
+                        AI-led
+                      </span>
+                    </div>
+                    <p className="text-xs text-[#7c7798] mt-1">
+                      AI-led coding workspace by Coding Thinker
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col xl:flex-row xl:items-center gap-3">
+                <div className="flex items-center gap-2 flex-wrap rounded-3xl border border-white/10 bg-black/25 p-2">
+                  <motion.button
+                    whileHover={{ scale: 1.04, y: -2 }}
+                    whileTap={{ scale: 0.96 }}
+                    onClick={() => window.open("/practice", "_blank")}
+                    className="group relative overflow-hidden rounded-2xl px-4 py-2.5 flex items-center gap-2 text-sm text-[#8d86ad] hover:text-white hover:bg-white/8 transition"
+                  >
+                    <Zap size={16} className="text-[#6c63ff]" />
+                    <span>Playground</span>
+                  </motion.button>
+
+                  <motion.button
+                    whileHover={{ scale: 1.04, y: -2 }}
+                    whileTap={{ scale: 0.96 }}
+                    onClick={() => navigate("/profile")}
+                    className="group relative overflow-hidden rounded-2xl px-4 py-2.5 flex items-center gap-2 text-sm text-[#8d86ad] hover:text-white hover:bg-white/8 transition"
+                  >
+                    <UserCircle size={16} />
+                    <span>Profile</span>
+                  </motion.button>
+
+                  <motion.button
+                    whileHover={{ scale: 1.04, y: -2 }}
+                    whileTap={{ scale: 0.96 }}
+                    onClick={() => navigate("/leaderboard")}
+                    className="group relative overflow-hidden rounded-2xl px-4 py-2.5 flex items-center gap-2 text-sm bg-[#00d4aa]/10 border border-[#00d4aa]/25 text-[#00d4aa] shadow-lg shadow-[#00d4aa]/10 transition"
+                  >
+                    <Trophy size={16} />
+                    <span>Leaderboard</span>
+                  </motion.button>
+
+                  {user?.role === "student" && (
+                    <motion.button
+                      whileHover={{ scale: 1.04, y: -2 }}
+                      whileTap={{ scale: 0.96 }}
+                      onClick={() => window.open("/debug", "_blank")}
+                      className="group relative overflow-hidden rounded-2xl px-4 py-2.5 flex items-center gap-2 text-sm text-[#8d86ad] hover:text-white hover:bg-white/8 transition"
+                    >
+                      <Bug size={16} />
+                      <span>Ask Doubt</span>
+                    </motion.button>
+                  )}
+
+                  <motion.button
+                    whileHover={{ scale: 1.04, y: -2 }}
+                    whileTap={{ scale: 0.96 }}
+                    onClick={() => window.open("/community", "_blank")}
+                    className="group relative overflow-hidden rounded-2xl px-4 py-2.5 flex items-center gap-2 text-sm text-[#8d86ad] hover:text-white hover:bg-white/8 transition"
+                  >
+                    <Users size={16} />
+                    <span>Community</span>
+                  </motion.button>
+
+                  {user?.role === "trainer" && (
+                    <motion.button
+                      whileHover={{ scale: 1.04, y: -2 }}
+                      whileTap={{ scale: 0.96 }}
+                      onClick={() => window.open("/tickets", "_blank")}
+                      className="group relative overflow-hidden rounded-2xl px-4 py-2.5 flex items-center gap-2 text-sm text-[#8d86ad] hover:text-white hover:bg-white/8 transition"
+                    >
+                      <TicketCheck size={16} />
+                      <span>Tickets</span>
+                    </motion.button>
+                  )}
+
+                  {user?.role === "trainer" && (
+                    <motion.button
+                      whileHover={{ scale: 1.04, y: -2 }}
+                      whileTap={{ scale: 0.96 }}
+                      onClick={() => window.open("/live", "_blank")}
+                      className="group relative overflow-hidden rounded-2xl px-4 py-2.5 flex items-center gap-2 text-sm text-[#8d86ad] hover:text-white hover:bg-white/8 transition"
+                    >
+                      <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
+                      <span>Open Live</span>
+                    </motion.button>
+                  )}
+
+                  {user?.role === "student" && (
+                    <motion.button
+                      whileHover={{ scale: 1.04, y: -2 }}
+                      whileTap={{ scale: 0.96 }}
+                      onClick={() => window.open("/live", "_blank")}
+                      className="group relative overflow-hidden rounded-2xl px-4 py-2.5 flex items-center gap-2 text-sm text-[#8d86ad] hover:text-white hover:bg-white/8 transition"
+                    >
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <span>Open Live</span>
+                    </motion.button>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2 flex-wrap xl:justify-end">
+                  <div className="hidden lg:flex items-center gap-2 rounded-2xl border border-[#00d4aa]/20 bg-[#00d4aa]/8 px-4 py-2.5 text-[#00d4aa] font-mono text-sm">
+                    <Zap size={15} />
+                    {new Date().toLocaleTimeString()}
+                  </div>
+
+                  {user?.role === "trainer" && (
+                    <>
+                      <button
+                        onClick={() => setShowContestModal(true)}
+                        className="rounded-2xl border border-[#f5a623]/30 bg-[#f5a623]/10 hover:bg-[#f5a623]/20 text-[#f5a623] px-4 py-2.5 flex items-center gap-2 text-sm font-bold transition"
+                      >
+                        <Trophy size={16} />
+                        Contest
+                      </button>
+
+                      <button
+                        onClick={() => setShowModal(true)}
+                        className="rounded-2xl bg-[#00d4aa] hover:bg-[#12f0c6] text-black px-4 py-2.5 flex items-center gap-2 text-sm font-black transition shadow-lg shadow-[#00d4aa]/20"
+                      >
+                        <Plus size={16} />
+                        Batch
+                      </button>
+                    </>
+                  )}
+
+                  <button
+                    onClick={logout}
+                    className="rounded-2xl border border-white/10 bg-white/5 hover:bg-red-500/15 hover:border-red-400/30 px-4 py-2.5 flex items-center gap-2 text-sm font-bold text-[#8d86ad] hover:text-red-300 transition"
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-
-          <div className="flex items-center gap-3 flex-wrap justify-end">
-            <motion.button
-              whileHover={{ scale: 1.04, y: -1 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => window.open("/practice", "_blank")}
-              className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-cyan-500/30 bg-gradient-to-r from-cyan-500/10 to-blue-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-cyan-500/10"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-400/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition duration-500" />
-
-              <div className="relative z-10 w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-400/20 flex items-center justify-center">
-                <Zap className="text-cyan-300" size={16} />
-              </div>
-
-              <div className="relative z-10 flex flex-col items-start">
-                <span className="text-white text-xs leading-none">
-                  Playground
-                </span>
-
-                <span className="text-zinc-400 text-[10px] mt-1">
-                  Run Code
-                </span>
-              </div>
-            </motion.button>
-
-            <motion.button
-              whileHover={{ scale: 1.04, y: -1 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => navigate("/profile")}
-              className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-blue-500/30 bg-gradient-to-r from-blue-500/10 to-cyan-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-blue-500/10"
-            >
-              <div className="relative z-10 w-8 h-8 rounded-xl bg-blue-500/20 border border-blue-400/20 flex items-center justify-center">
-                <UserCircle className="text-blue-300" size={16} />
-              </div>
-
-              <div className="relative z-10 flex flex-col items-start">
-                <span className="text-white text-xs leading-none">
-                  Profile
-                </span>
-
-                <span className="text-zinc-400 text-[10px] mt-1">
-                  Coding Identity
-                </span>
-              </div>
-            </motion.button>
-
-            <motion.button
-              whileHover={{ scale: 1.04, y: -1 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => navigate("/leaderboard")}
-              className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-yellow-500/30 bg-gradient-to-r from-yellow-500/10 to-orange-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-yellow-500/10"
-            >
-              <div className="relative z-10 w-8 h-8 rounded-xl bg-yellow-500/20 border border-yellow-400/20 flex items-center justify-center">
-                <Trophy className="text-yellow-300" size={16} />
-              </div>
-
-              <div className="relative z-10 flex flex-col items-start">
-                <span className="text-white text-xs leading-none">
-                  Leaderboard
-                </span>
-
-                <span className="text-zinc-400 text-[10px] mt-1">
-                  Rankings
-                </span>
-              </div>
-            </motion.button>
-
-            {user?.role === "student" && (
-              <motion.button
-                whileHover={{ scale: 1.04, y: -1 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => window.open("/debug", "_blank")}
-                className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-500/10 to-pink-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-purple-500/10"
-              >
-                <div className="relative z-10 w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/20 flex items-center justify-center">
-                  <Bug className="text-purple-300" size={16} />
-                </div>
-
-                <div className="relative z-10 flex flex-col items-start">
-                  <span className="text-white text-xs leading-none">
-                    Debug Code
-                  </span>
-
-                  <span className="text-zinc-400 text-[10px] mt-1">
-                    Raise Doubt
-                  </span>
-                </div>
-              </motion.button>
-            )}
-
-            <motion.button
-              whileHover={{ scale: 1.04, y: -1 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => window.open("/community", "_blank")}
-              className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-cyan-500/30 bg-gradient-to-r from-cyan-500/10 to-blue-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-cyan-500/10"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-400/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition duration-500" />
-
-              <div className="relative z-10 w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-400/20 flex items-center justify-center">
-                <Users className="text-cyan-300" size={16} />
-              </div>
-
-              <div className="relative z-10 flex flex-col items-start">
-                <span className="text-white text-xs leading-none">
-                  Community
-                </span>
-
-                <span className="text-zinc-400 text-[10px] mt-1">
-                  Join Chat Room
-                </span>
-              </div>
-
-              <div className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
-            </motion.button>
-
-            {user?.role === "trainer" && (
-              <motion.button
-                whileHover={{ scale: 1.04, y: -1 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => window.open("/tickets", "_blank")}
-                className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-500/10 to-pink-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-purple-500/10"
-              >
-                <div className="relative z-10 w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/20 flex items-center justify-center">
-                  <TicketCheck className="text-purple-300" size={16} />
-                </div>
-
-                <div className="relative z-10 flex flex-col items-start">
-                  <span className="text-white text-xs leading-none">
-                    Active Tickets
-                  </span>
-
-                  <span className="text-zinc-400 text-[10px] mt-1">
-                    Resolve Doubts
-                  </span>
-                </div>
-              </motion.button>
-            )}
-
-            {user?.role === "trainer" && (
-              <motion.button
-                whileHover={{ scale: 1.04, y: -1 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => window.open("/live", "_blank")}
-                className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-red-500/30 bg-gradient-to-r from-red-500/10 to-orange-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-red-500/10"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-400/10 to-orange-500/0 opacity-0 group-hover:opacity-100 transition duration-500" />
-
-                <div className="relative z-10 w-8 h-8 rounded-xl bg-red-500/20 border border-red-400/20 flex items-center justify-center">
-                  <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-                </div>
-
-                <div className="relative z-10 flex flex-col items-start">
-                  <span className="text-white text-xs leading-none">
-                    Live Code
-                  </span>
-
-                  <span className="text-zinc-400 text-[10px] mt-1">
-                    Share Live
-                  </span>
-                </div>
-              </motion.button>
-            )}
-
-            {user?.role === "student" && (
-              <motion.button
-                whileHover={{ scale: 1.04, y: -1 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => window.open("/live", "_blank")}
-                className="relative overflow-hidden group px-5 py-3 rounded-2xl border border-green-500/30 bg-gradient-to-r from-green-500/10 to-emerald-600/10 backdrop-blur-xl flex items-center gap-3 font-bold transition-all shadow-xl shadow-green-500/10"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-green-500/0 via-green-400/10 to-emerald-500/0 opacity-0 group-hover:opacity-100 transition duration-500" />
-
-                <div className="relative z-10 w-8 h-8 rounded-xl bg-green-500/20 border border-green-400/20 flex items-center justify-center">
-                  <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
-                </div>
-
-                <div className="relative z-10 flex flex-col items-start">
-                  <span className="text-white text-xs leading-none">
-                    Open Live
-                  </span>
-
-                  <span className="text-zinc-400 text-[10px] mt-1">
-                    Watch Trainer
-                  </span>
-                </div>
-              </motion.button>
-            )}
-
-            {user?.role === "trainer" && (
-              <>
-                <button
-                  onClick={() => setShowContestModal(true)}
-                  className="bg-yellow-500/10 hover:bg-yellow-500/20 border border-yellow-500/30 text-yellow-300 px-4 py-3 rounded-2xl flex items-center gap-2 text-sm font-semibold transition"
-                >
-                  <Trophy size={16} />
-                  Contest
-                </button>
-
-                <button
-                  onClick={() => setShowModal(true)}
-                  className="bg-blue-600 hover:bg-blue-700 px-4 py-3 rounded-2xl flex items-center gap-2 text-sm font-semibold transition"
-                >
-                  <Plus size={16} />
-                  Batch
-                </button>
-              </>
-            )}
-
-            <button
-              onClick={logout}
-              className="bg-zinc-900 hover:bg-red-600 border border-zinc-800 hover:border-red-500 px-4 py-3 rounded-2xl flex items-center gap-2 text-sm font-semibold transition"
-            >
-              <LogOut size={16} />
-              Logout
-            </button>
-          </div>
-        </div>
+        </motion.div>
 
         {user?.role === "student" && !profileCompleted && (
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-8 relative overflow-hidden rounded-[32px] border border-cyan-500/20 bg-gradient-to-r from-cyan-500/10 to-blue-600/10 backdrop-blur-xl p-6 shadow-2xl shadow-cyan-500/10"
+            className="mb-8 relative overflow-hidden rounded-[28px] border border-[#00d4aa]/20 bg-[#00d4aa]/8 backdrop-blur-2xl p-5 shadow-2xl shadow-[#00d4aa]/10"
           >
-            <div className="absolute -top-20 -right-20 w-64 h-64 bg-cyan-500/20 blur-3xl rounded-full" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent,rgba(0,212,170,0.18),transparent)] opacity-30" />
 
-            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-              <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
-                  <UserCircle className="text-cyan-400" size={26} />
-                </div>
-
+            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+              <div className="flex items-center gap-4">
+                <div className="w-3 h-3 rounded-full bg-[#00d4aa] shadow-lg shadow-[#00d4aa]/50" />
                 <div>
-                  <h2 className="text-2xl font-black">
+                  <h2 className="text-lg font-black">
                     Complete Your Coding Profile
                   </h2>
 
-                  <p className="text-sm text-zinc-400 mt-2 max-w-2xl leading-relaxed">
-                    Add your LeetCode, CodeChef, GitHub and LinkedIn profiles.
-                    This will unlock your student profile and future leaderboard ranking.
+                  <p className="text-sm text-[#8d86ad] mt-1">
+                    Add LeetCode · GitHub · LinkedIn to unlock full ranking.
                   </p>
                 </div>
               </div>
 
               <button
                 onClick={() => navigate("/complete-profile")}
-                className="px-7 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 text-sm font-black shadow-xl shadow-cyan-500/20"
+                className="px-6 py-3 rounded-2xl bg-[#00d4aa] hover:bg-[#12f0c6] text-black text-sm font-black"
               >
-                Complete Now
+                Complete Now →
               </button>
             </div>
           </motion.div>
@@ -535,144 +465,173 @@ export default function Dashboard() {
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-8 relative overflow-hidden rounded-[32px] border border-green-500/20 bg-green-500/5 backdrop-blur-xl p-6"
+            className="mb-8 relative overflow-hidden rounded-[28px] border border-[#00d4aa]/20 bg-[#00d4aa]/8 backdrop-blur-2xl p-5"
           >
-            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-              <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-green-500/10 border border-green-500/20 flex items-center justify-center">
-                  <CheckCircle className="text-green-400" size={26} />
-                </div>
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent,rgba(0,212,170,0.16),transparent)] opacity-30" />
 
+            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+              <div className="flex items-center gap-4">
+                <div className="w-3 h-3 rounded-full bg-[#00d4aa] shadow-lg shadow-[#00d4aa]/50" />
                 <div>
-                  <h2 className="text-2xl font-black">
+                  <h2 className="text-lg font-black">
                     Your Coding Profile is Ready
                   </h2>
 
-                  <p className="text-sm text-zinc-400 mt-2 max-w-2xl leading-relaxed">
-                    {profile?.college || "College not added"} •{" "}
-                    {profile?.batch || "Batch not added"} • LeetCode, GitHub and LinkedIn connected.
+                  <p className="text-sm text-[#8d86ad] mt-1">
+                    {profile?.college || "College not added"} ·{" "}
+                    {profile?.batch || "Batch not added"} · LeetCode · GitHub ·
+                    LinkedIn connected
                   </p>
                 </div>
               </div>
 
               <button
                 onClick={() => navigate("/profile")}
-                className="px-7 py-4 rounded-2xl bg-green-600 hover:bg-green-700 text-sm font-black"
+                className="px-6 py-3 rounded-2xl bg-[#00d4aa] hover:bg-[#12f0c6] text-black text-sm font-black"
               >
-                View Profile
+                View Profile →
               </button>
             </div>
           </motion.div>
         )}
 
-        <div className="grid grid-cols-1 xl:grid-cols-[0.8fr_1.2fr] gap-6 mb-8">
+        <div className="grid grid-cols-1 xl:grid-cols-[0.75fr_1.25fr] gap-6 mb-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative overflow-hidden rounded-[32px] border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-orange-500/5 backdrop-blur-xl p-6"
+            className="relative overflow-hidden rounded-[28px] border border-[#f5a623]/30 bg-[#080711]/85 backdrop-blur-2xl shadow-2xl shadow-[#f5a623]/10"
           >
-            <div className="absolute -top-20 -right-20 w-60 h-60 bg-yellow-500/20 blur-3xl rounded-full" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(245,166,35,0.22),transparent_45%)]" />
 
             <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center">
-                  <Crown className="text-yellow-300" size={28} />
+              <div className="flex items-center justify-between border-b border-[#f5a623]/20 px-7 py-5">
+                <div className="flex items-center gap-3">
+                  <Crown className="text-[#f5a623]" size={20} />
+                  <h2 className="tracking-[0.2em] text-sm font-black text-[#f5a623]">
+                    YOUR PROFILE
+                  </h2>
                 </div>
 
-                <div>
-                  <h2 className="text-xl font-black">Your Rank</h2>
-
-                  <p className="text-xs text-zinc-500">
-                    LeetCode Leaderboard
-                  </p>
-                </div>
+                {/* <span className="rounded-full bg-[#f5a623]/10 border border-[#f5a623]/20 px-4 py-1.5 text-xs font-black text-[#f5a623]">
+                  TOP 10%
+                </span> */}
               </div>
 
-              <h1 className="text-7xl font-black text-yellow-300">
-                {myRank ? `#${myRank.rank}` : "--"}
-              </h1>
+              <div className="p-7">
+                <h1 className="text-8xl lg:text-9xl font-black text-[#f5a623] tracking-tight drop-shadow-[0_0_35px_rgba(245,166,35,0.35)]">
+                  {myRank ? `#${myRank.rank}` : "--"}
+                </h1>
 
-              <p className="text-zinc-400 mt-3">
-                {myRank
-                  ? `${myRank.leetcodeTotalSolved || 0} Problems Solved`
-                  : "Sync your LeetCode profile"}
-              </p>
+                <p className="text-[#8d86ad] mt-3 text-lg">
+                  {myRank
+                    ? `${myRank.leetcodeTotalSolved || 0} Problems Solved`
+                    : "Sync your LeetCode profile"}
+                </p>
 
-              <button
-                onClick={() => navigate("/leaderboard")}
-                className="mt-6 w-full bg-yellow-500 hover:bg-yellow-600 text-black p-4 rounded-2xl font-black"
-              >
-                View Full Rankings
-              </button>
+                <div className="grid grid-cols-3 gap-3 mt-7">
+                  <div className="rounded-2xl border border-[#00d4aa]/30 bg-[#00d4aa]/8 p-4 text-center">
+                    <p className="text-2xl font-black text-[#00d4aa]">
+                      {myRank?.leetcodeEasySolved || 0}
+                    </p>
+                    <p className="text-xs text-[#8d86ad]">Easy</p>
+                  </div>
+
+                  <div className="rounded-2xl border border-[#f5a623]/30 bg-[#f5a623]/8 p-4 text-center">
+                    <p className="text-2xl font-black text-[#f5a623]">
+                      {myRank?.leetcodeMediumSolved || 0}
+                    </p>
+                    <p className="text-xs text-[#8d86ad]">Medium</p>
+                  </div>
+
+                  <div className="rounded-2xl border border-rose-400/30 bg-rose-400/8 p-4 text-center">
+                    <p className="text-2xl font-black text-rose-400">
+                      {myRank?.leetcodeHardSolved || 0}
+                    </p>
+                    <p className="text-xs text-[#8d86ad]">Hard</p>
+                  </div>
+                </div>
+
+                <div className="mt-6">
+                  <div className="flex justify-between text-xs text-[#8d86ad] mb-2">
+                    <span>Progress to Rank #50</span>
+                    <span className="text-[#f5a623]">64%</span>
+                  </div>
+                  <div className="h-2 rounded-full bg-white/8 overflow-hidden">
+                    <div className="h-full w-[64%] rounded-full bg-gradient-to-r from-[#f5a623] to-orange-400" />
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => navigate("/leaderboard")}
+                  className="mt-7 w-full rounded-2xl bg-[#f5a623] hover:bg-[#ffb536] text-black p-4 font-black shadow-xl shadow-[#f5a623]/25"
+                >
+                  ↗ View Full Rankings
+                </button>
+              </div>
             </div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-[32px] border border-zinc-800 bg-zinc-950/80 backdrop-blur-xl p-6"
+            className="relative overflow-hidden rounded-[28px] border border-[#00d4aa]/25 bg-[#080711]/85 backdrop-blur-2xl shadow-2xl shadow-[#00d4aa]/10"
           >
-            <div className="flex items-center justify-between mb-6">
-              <div>
+            <div className="flex items-center justify-between border-b border-[#00d4aa]/20 px-7 py-5">
+              <div className="flex items-center gap-3">
+                <Trophy className="text-[#00d4aa]" size={20} />
                 <h2 className="text-xl font-black">Top 5 Students</h2>
-
-                <p className="text-xs text-zinc-500">
-                  Live leaderboard
-                </p>
               </div>
 
-              <Medal className="text-yellow-400" />
+              <div className="flex items-center gap-2 text-sm text-[#8d86ad]">
+                <span className="w-3 h-3 rounded-full bg-[#00d4aa] shadow-lg shadow-[#00d4aa]/50" />
+                Live
+              </div>
             </div>
 
-            <div className="space-y-3">
+            <div className="p-7 space-y-5">
               {leaderboard.slice(0, 5).map((student) => (
                 <motion.div
                   key={student._id}
-                  whileHover={{ scale: 1.02, x: 4 }}
-                  className={`rounded-2xl p-4 border ${
-                    student.email === user?.email
-                      ? "border-cyan-500/40 bg-cyan-500/10"
-                      : "border-zinc-800 bg-black/40"
+                  whileHover={{ x: 6 }}
+                  className={`flex items-center justify-between rounded-2xl transition ${
+                    student.email === user?.email ? "bg-[#00d4aa]/8" : ""
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center font-black ${
-                          student.rank === 1
-                            ? "bg-yellow-500 text-black"
-                            : student.rank === 2
-                            ? "bg-zinc-300 text-black"
-                            : student.rank === 3
-                            ? "bg-orange-500 text-black"
-                            : "bg-zinc-900 text-zinc-400 border border-zinc-800"
-                        }`}
-                      >
-                        #{student.rank}
-                      </div>
-
-                      <div>
-                        <h3 className="font-bold">{student.name}</h3>
-
-                        <p className="text-xs text-zinc-500">
-                          {student.college || "Student"}
-                        </p>
-                      </div>
+                  <div className="flex items-center gap-4">
+                    <div
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center font-black ${
+                        student.rank === 1
+                          ? "text-[#f5a623] bg-[#f5a623]/10 shadow-lg shadow-[#f5a623]/20"
+                          : student.rank === 2
+                          ? "text-slate-200 bg-white/10"
+                          : student.rank === 3
+                          ? "text-orange-400 bg-orange-400/10"
+                          : "text-[#8d86ad] bg-white/8"
+                      }`}
+                    >
+                      {student.rank}
                     </div>
 
-                    <div className="text-right">
-                      <p className="text-xl font-black text-cyan-400">
-                        {student.leetcodeTotalSolved || 0}
-                      </p>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#00d4aa] to-[#6c63ff] flex items-center justify-center text-black font-black">
+                      {student.name?.charAt(0) || "S"}
+                    </div>
 
-                      <p className="text-[10px] text-zinc-500">solved</p>
+                    <div>
+                      <h3 className="font-black">{student.name}</h3>
+                      <p className="text-sm text-[#8d86ad]">
+                        {student.college || "Student"}
+                      </p>
                     </div>
                   </div>
+
+                  <p className="text-2xl font-black text-white">
+                    {student.leetcodeTotalSolved || 0}
+                  </p>
                 </motion.div>
               ))}
 
               {leaderboard.length === 0 && (
-                <p className="text-sm text-zinc-600 text-center py-8">
+                <p className="text-sm text-[#8d86ad] text-center py-10">
                   No leaderboard data yet
                 </p>
               )}
@@ -680,91 +639,93 @@ export default function Dashboard() {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-[1.6fr_1fr] gap-6 mb-8">
+        <div className="grid grid-cols-1 xl:grid-cols-[1.1fr_0.9fr] gap-6 mb-6">
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative overflow-hidden rounded-[32px] border border-zinc-800 bg-zinc-950/80 backdrop-blur-xl p-8"
+            className="relative overflow-hidden rounded-[28px] border border-[#6c63ff]/25 bg-[#080711]/85 backdrop-blur-2xl p-7 shadow-2xl shadow-[#6c63ff]/10"
           >
-            <div className="absolute -right-20 -top-20 w-64 h-64 bg-cyan-500/10 blur-3xl rounded-full" />
+            <div className="absolute -right-24 -top-24 w-72 h-72 bg-[#6c63ff]/20 blur-3xl rounded-full" />
 
             <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-semibold mb-5">
-                <Sparkles size={14} />
-                Welcome back, {user?.name}
+              <div className="flex items-center justify-between mb-6">
+                <div className="inline-flex items-center gap-2 text-[#8d86ad] text-sm font-bold">
+                  <Sparkles size={16} className="text-[#6c63ff]" />
+                  Welcome back, {user?.name}
+                </div>
+
+                <span className="rounded-full border border-[#00d4aa]/20 bg-[#00d4aa]/8 px-4 py-2 text-xs font-black text-[#00d4aa]">
+                  Session Active
+                </span>
               </div>
 
-              <h2 className="text-4xl font-black tracking-tight leading-tight">
-                Learn from trainer code.
+              <h2 className="text-4xl lg:text-5xl font-black leading-tight">
+                Learn from
                 <br />
-                Practice inside your own compiler.
+                <span className="bg-gradient-to-r from-[#00d4aa] via-[#6c63ff] to-[#f5a623] bg-clip-text text-transparent">
+                  trainer code.
+                </span>
               </h2>
 
-              <p className="text-zinc-500 text-sm mt-4 max-w-2xl leading-relaxed">
-                Open your assigned batches, read structured code files, and jump into
-                the Practice Arena whenever you want to test your own logic.
+              <p className="text-[#8d86ad] text-base mt-5 max-w-3xl leading-relaxed">
+                Practice inside your own compiler. Open assigned templates, work
+                in the Arena, apply code patterns and move faster every day.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                <div className="rounded-3xl border border-zinc-800 bg-black/40 p-5">
-                  <Users className="text-green-400 mb-3" size={22} />
-                  <p className="text-2xl font-black">{onlineUsers.length}</p>
-                  <p className="text-xs text-zinc-500 mt-1">Active users</p>
+                <div className="rounded-2xl border border-[#00d4aa]/20 bg-[#00d4aa]/8 p-5">
+                  <Users className="text-[#00d4aa] mb-3" size={22} />
+                  <p className="text-3xl font-black">{onlineUsers.length}</p>
+                  <p className="text-xs text-[#8d86ad] mt-1">Active users</p>
                 </div>
 
-                <div className="rounded-3xl border border-zinc-800 bg-black/40 p-5">
-                  <FolderKanban className="text-cyan-400 mb-3" size={22} />
-                  <p className="text-2xl font-black">{batches.length}</p>
-                  <p className="text-xs text-zinc-500 mt-1">Available batches</p>
+                <div className="rounded-2xl border border-[#6c63ff]/20 bg-[#6c63ff]/8 p-5">
+                  <FolderKanban className="text-[#6c63ff] mb-3" size={22} />
+                  <p className="text-3xl font-black">{batches.length}</p>
+                  <p className="text-xs text-[#8d86ad] mt-1">Batches</p>
                 </div>
 
-                <div className="rounded-3xl border border-zinc-800 bg-black/40 p-5">
-                  <Code2 className="text-blue-400 mb-3" size={22} />
-                  <p className="text-2xl font-black">Live</p>
-                  <p className="text-xs text-zinc-500 mt-1">Practice compiler</p>
+                <div className="rounded-2xl border border-[#f5a623]/20 bg-[#f5a623]/8 p-5">
+                  <Code2 className="text-[#f5a623] mb-3" size={22} />
+                  <p className="text-3xl font-black">Live</p>
+                  <p className="text-xs text-[#8d86ad] mt-1">Compiler</p>
                 </div>
               </div>
             </div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }}
-            className="rounded-[32px] border border-zinc-800 bg-zinc-950/80 backdrop-blur-xl p-6"
+            className="rounded-[28px] border border-[#00d4aa]/20 bg-[#080711]/85 backdrop-blur-2xl shadow-2xl shadow-[#00d4aa]/10 overflow-hidden"
           >
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <h3 className="text-lg font-bold flex items-center gap-2">
-                  <Bell size={18} className="text-cyan-400" />
-                  Announcements
-                </h3>
+            <div className="flex items-center justify-between border-b border-[#00d4aa]/20 px-7 py-5">
+              <h3 className="text-xl font-black flex items-center gap-3">
+                <Bell size={20} className="text-[#00d4aa]" />
+                Announcements
+              </h3>
 
-                <p className="text-xs text-zinc-500 mt-1">
-                  Latest updates for students
-                </p>
-              </div>
-
-              <span className="text-[10px] text-cyan-300 px-3 py-1 rounded-full border border-cyan-500/20 bg-cyan-500/10">
-                Live Board
+              <span className="text-[10px] text-[#00d4aa] px-3 py-1 rounded-full border border-[#00d4aa]/20 bg-[#00d4aa]/10 font-black">
+                3 NEW
               </span>
             </div>
 
-            <div className="space-y-3">
+            <div className="p-6 space-y-4">
               {announcements.map((item, index) => (
                 <motion.div
                   key={index}
-                  whileHover={{ x: 4 }}
-                  className="rounded-2xl border border-zinc-800 bg-black/40 p-4"
+                  whileHover={{ x: 5 }}
+                  className="rounded-2xl border border-white/10 bg-black/20 p-5"
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="text-sm font-semibold">{item.title}</h4>
-                    <span className="text-[10px] px-2 py-1 rounded-full bg-zinc-800 text-zinc-400">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[10px] px-3 py-1 rounded-full bg-[#00d4aa]/10 text-[#00d4aa] border border-[#00d4aa]/20 font-black">
                       {item.tag}
                     </span>
+                    <span className="text-xs text-[#8d86ad]">2h ago</span>
                   </div>
 
-                  <p className="text-xs text-zinc-500 leading-relaxed">
+                  <h4 className="font-black">{item.title}</h4>
+                  <p className="text-sm text-[#8d86ad] mt-2 leading-relaxed">
                     {item.desc}
                   </p>
                 </motion.div>
@@ -773,12 +734,17 @@ export default function Dashboard() {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-[1.5fr_0.9fr] gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-[1.45fr_0.95fr] gap-6">
           <div>
-            <div className="flex items-center justify-between mb-5">
+            <div className="flex items-end justify-between mb-5">
               <div>
-                <h3 className="text-xl font-bold">Your Batches</h3>
-                <p className="text-xs text-zinc-500 mt-1">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#00d4aa]/10 border border-[#00d4aa]/20 text-[#00d4aa] text-[11px] font-black mb-3">
+                  <FolderKanban size={13} />
+                  Workspace Access
+                </div>
+
+                <h3 className="text-3xl font-black">Your Batches</h3>
+                <p className="text-sm text-[#8d86ad] mt-1">
                   Select a batch and enter access key to open workspace
                 </p>
               </div>
@@ -790,7 +756,7 @@ export default function Dashboard() {
                   key={batch._id}
                   initial={{ opacity: 0, y: 14 }}
                   animate={{ opacity: 1, y: 0 }}
-                  whileHover={{ scale: 1.02, y: -4 }}
+                  whileHover={{ scale: 1.02, y: -6 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => {
                     const key = prompt("Enter Batch Access Key");
@@ -801,70 +767,87 @@ export default function Dashboard() {
                       alert("Wrong Access Key");
                     }
                   }}
-                  className="cursor-pointer relative overflow-hidden rounded-[28px] border border-zinc-800 bg-gradient-to-br from-zinc-950 to-black p-6 hover:border-cyan-500/60 transition-all"
+                  className="cursor-pointer group relative overflow-hidden rounded-[28px] border border-[#00d4aa]/20 bg-[#080711]/85 hover:border-[#00d4aa]/50 backdrop-blur-2xl p-6 transition shadow-xl shadow-black/20 hover:shadow-[#00d4aa]/10"
                 >
-                  <div className="absolute -top-16 -right-16 w-36 h-36 bg-cyan-500/10 blur-3xl rounded-full" />
+                  <div className="absolute -top-20 -right-20 w-48 h-48 bg-[#00d4aa]/15 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition" />
 
                   <div className="relative z-10">
-                    <div className="flex items-start justify-between">
-                      <div className="w-13 h-13 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-6">
-                        <FolderKanban size={25} className="text-cyan-400" />
+                    <div className="flex items-start justify-between mb-7">
+                      <div className="w-14 h-14 rounded-2xl bg-[#00d4aa]/10 border border-[#00d4aa]/20 flex items-center justify-center">
+                        <FolderKanban size={25} className="text-[#00d4aa]" />
                       </div>
 
-                      <span className="text-[10px] px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-500">
+                      <span className="text-[10px] px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[#8d86ad]">
                         Workspace
                       </span>
                     </div>
 
-                    <h2 className="text-xl font-bold mb-2">
+                    <h2 className="text-2xl font-black mb-3 group-hover:text-[#00d4aa] transition">
                       {batch.batchName}
                     </h2>
 
-                    <p className="text-zinc-500 text-sm leading-relaxed min-h-[45px]">
+                    <p className="text-[#8d86ad] text-sm leading-relaxed min-h-[50px]">
                       {batch.description || "No description added yet."}
                     </p>
 
-                    <div className="mt-6 flex items-center justify-between">
-                      <span className="text-xs text-zinc-500">
+                    <div className="mt-7 flex items-center justify-between">
+                      <span className="text-xs text-[#8d86ad]">
                         Open secure workspace
                       </span>
 
-                      <span className="text-cyan-400 text-lg">→</span>
+                      <span className="w-10 h-10 rounded-2xl bg-[#00d4aa]/10 border border-[#00d4aa]/20 flex items-center justify-center text-[#00d4aa] group-hover:translate-x-1 transition">
+                        →
+                      </span>
                     </div>
                   </div>
                 </motion.div>
               ))}
+
+              {batches.length === 0 && (
+                <div className="md:col-span-2 rounded-[28px] border border-white/10 bg-[#080711]/85 p-10 text-center">
+                  <FolderKanban
+                    className="mx-auto text-[#8d86ad] mb-4"
+                    size={34}
+                  />
+                  <p className="text-[#8d86ad] font-bold">
+                    No batches available yet
+                  </p>
+                  <p className="text-xs text-[#625d7c] mt-2">
+                    Trainer-created batches will appear here.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
           <div>
-            <div className="rounded-[32px] border border-zinc-800 bg-zinc-950/80 backdrop-blur-xl p-6">
-              <div className="flex items-center justify-between mb-5">
+            <div className="rounded-[28px] border border-[#f5a623]/20 bg-[#080711]/85 backdrop-blur-2xl shadow-2xl shadow-[#f5a623]/10 overflow-hidden">
+              <div className="flex items-center justify-between border-b border-[#f5a623]/20 px-7 py-5">
                 <div>
-                  <h3 className="text-lg font-bold flex items-center gap-2">
-                    <Trophy size={18} className="text-yellow-400" />
-                    Upcoming Coding Challenges
+                  <h3 className="text-xl font-black flex items-center gap-3">
+                    <Trophy size={20} className="text-[#f5a623]" />
+                    Challenges
                   </h3>
 
-                  <p className="text-xs text-zinc-500 mt-1">
+                  <p className="text-xs text-[#8d86ad] mt-1">
                     Trainer contests appear first
                   </p>
                 </div>
 
-                <CalendarDays className="text-zinc-500" size={18} />
+                <CalendarDays className="text-[#8d86ad]" size={18} />
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-4 max-h-[780px] overflow-y-auto p-6">
                 {contests.map((contest) => (
                   <motion.div
                     key={contest._id}
-                    whileHover={{ scale: 1.02, x: 3 }}
-                    className="relative rounded-3xl border border-yellow-500/20 bg-yellow-500/5 p-5 hover:border-yellow-500/50 transition"
+                    whileHover={{ scale: 1.02, x: 4 }}
+                    className="relative rounded-2xl border border-[#f5a623]/20 bg-[#f5a623]/8 p-5 hover:bg-[#f5a623]/12 transition"
                   >
                     {user?.role === "trainer" && (
                       <button
                         onClick={() => deleteContest(contest._id)}
-                        className="absolute top-4 right-4 text-red-400 hover:text-red-300"
+                        className="absolute top-4 right-4 text-red-300 hover:text-red-200 bg-red-400/10 border border-red-300/20 w-8 h-8 rounded-xl flex items-center justify-center"
                       >
                         <Trash2 size={15} />
                       </button>
@@ -874,25 +857,25 @@ export default function Dashboard() {
                       href={contest.contestLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="block pr-8"
+                      className="block pr-10"
                     >
-                      <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-red-400 to-orange-500 mb-4 flex items-center justify-center text-black font-black text-xs">
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#f5a623] to-orange-500 mb-4 flex items-center justify-center text-black font-black text-xs">
                         {contest.platform.slice(0, 2).toUpperCase()}
                       </div>
 
-                      <p className="text-xs text-yellow-300 font-semibold">
+                      <p className="text-xs text-[#f5a623] font-bold">
                         Trainer Contest
                       </p>
 
-                      <h4 className="text-sm font-bold mt-1">
+                      <h4 className="text-base font-black mt-1">
                         {contest.contestName}
                       </h4>
 
-                      <p className="text-xs text-zinc-500 mt-2">
+                      <p className="text-xs text-[#8d86ad] mt-2">
                         Batch: {contest.batchName}
                       </p>
 
-                      <p className="text-xs text-zinc-500 mt-1">
+                      <p className="text-xs text-[#8d86ad] mt-1">
                         {contest.contestDate} • {contest.contestTime}
                       </p>
                     </a>
@@ -905,31 +888,31 @@ export default function Dashboard() {
                     href={contest.url}
                     target="_blank"
                     rel="noreferrer"
-                    whileHover={{ scale: 1.02, x: 3 }}
-                    className="block rounded-3xl border border-zinc-800 bg-black/40 p-5 hover:border-cyan-500/50 transition"
+                    whileHover={{ scale: 1.02, x: 4 }}
+                    className="block rounded-2xl border border-white/10 bg-black/20 hover:bg-white/[0.06] p-5 transition"
                   >
                     <div
-                      className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${contest.color} mb-4 flex items-center justify-center text-black font-black text-xs`}
+                      className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${contest.color} mb-4 flex items-center justify-center text-black font-black text-xs`}
                     >
                       {contest.platform.slice(0, 2).toUpperCase()}
                     </div>
 
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-4">
                       <div>
-                        <p className="text-xs text-zinc-500">
+                        <p className="text-xs text-[#8d86ad]">
                           {contest.platform}
                         </p>
 
-                        <h4 className="text-sm font-bold mt-1">
+                        <h4 className="text-base font-black mt-1">
                           {contest.title}
                         </h4>
 
-                        <p className="text-xs text-zinc-500 mt-2">
+                        <p className="text-xs text-[#8d86ad] mt-2">
                           {contest.time}
                         </p>
                       </div>
 
-                      <ExternalLink className="text-zinc-500" size={16} />
+                      <ExternalLink className="text-[#8d86ad]" size={16} />
                     </div>
                   </motion.a>
                 ))}
@@ -940,180 +923,189 @@ export default function Dashboard() {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-xl flex items-center justify-center z-50 p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.86, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            className="w-[460px] bg-zinc-950 border border-zinc-800 rounded-[32px] p-7 shadow-2xl"
+            className="relative overflow-hidden w-full max-w-[480px] bg-[#080711]/95 border border-[#00d4aa]/25 rounded-[28px] p-7 shadow-2xl shadow-[#00d4aa]/20"
           >
-            <h2 className="text-2xl font-black mb-2">Create Batch</h2>
+            <div className="absolute -top-20 -right-20 w-60 h-60 bg-[#00d4aa]/20 blur-3xl rounded-full" />
 
-            <p className="text-xs text-zinc-500 mb-6">
-              Add a new protected learning workspace.
-            </p>
+            <div className="relative z-10">
+              <h2 className="text-3xl font-black mb-2">Create Batch</h2>
 
-            <input
-              type="text"
-              placeholder="Batch Name"
-              value={batchData.batchName}
-              onChange={(e) =>
-                setBatchData({
-                  ...batchData,
-                  batchName: e.target.value,
-                })
-              }
-              className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 mb-4 outline-none text-sm focus:border-cyan-500"
-            />
+              <p className="text-xs text-[#8d86ad] mb-6">
+                Add a new protected learning workspace.
+              </p>
 
-            <input
-              type="password"
-              placeholder="Batch Access Key"
-              value={batchData.accessKey}
-              onChange={(e) =>
-                setBatchData({
-                  ...batchData,
-                  accessKey: e.target.value,
-                })
-              }
-              className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 mb-4 outline-none text-sm focus:border-cyan-500"
-            />
+              <input
+                type="text"
+                placeholder="Batch Name"
+                value={batchData.batchName}
+                onChange={(e) =>
+                  setBatchData({
+                    ...batchData,
+                    batchName: e.target.value,
+                  })
+                }
+                className="w-full p-4 rounded-2xl bg-black/30 border border-white/10 mb-4 outline-none text-sm focus:border-[#00d4aa] transition"
+              />
 
-            <textarea
-              placeholder="Description"
-              value={batchData.description}
-              onChange={(e) =>
-                setBatchData({
-                  ...batchData,
-                  description: e.target.value,
-                })
-              }
-              className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 mb-6 outline-none h-28 text-sm focus:border-cyan-500"
-            />
+              <input
+                type="password"
+                placeholder="Batch Access Key"
+                value={batchData.accessKey}
+                onChange={(e) =>
+                  setBatchData({
+                    ...batchData,
+                    accessKey: e.target.value,
+                  })
+                }
+                className="w-full p-4 rounded-2xl bg-black/30 border border-white/10 mb-4 outline-none text-sm focus:border-[#00d4aa] transition"
+              />
 
-            <div className="flex gap-4">
-              <button
-                onClick={createBatch}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 p-4 rounded-2xl text-sm font-bold"
-              >
-                Create
-              </button>
+              <textarea
+                placeholder="Description"
+                value={batchData.description}
+                onChange={(e) =>
+                  setBatchData({
+                    ...batchData,
+                    description: e.target.value,
+                  })
+                }
+                className="w-full p-4 rounded-2xl bg-black/30 border border-white/10 mb-6 outline-none h-28 text-sm focus:border-[#00d4aa] transition"
+              />
 
-              <button
-                onClick={() => setShowModal(false)}
-                className="flex-1 bg-zinc-800 hover:bg-zinc-700 p-4 rounded-2xl text-sm font-bold"
-              >
-                Cancel
-              </button>
+              <div className="flex gap-4">
+                <button
+                  onClick={createBatch}
+                  className="flex-1 bg-[#00d4aa] hover:bg-[#12f0c6] text-black p-4 rounded-2xl text-sm font-black"
+                >
+                  Create
+                </button>
+
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="flex-1 bg-white/8 hover:bg-white/12 border border-white/10 p-4 rounded-2xl text-sm font-bold"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </motion.div>
         </div>
       )}
 
       {showContestModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-xl flex items-center justify-center z-50 p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.86, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            className="w-[500px] bg-zinc-950 border border-zinc-800 rounded-[32px] p-7 shadow-2xl"
+            className="relative overflow-hidden w-full max-w-[520px] bg-[#080711]/95 border border-[#f5a623]/25 rounded-[28px] p-7 shadow-2xl shadow-[#f5a623]/20"
           >
-            <h2 className="text-2xl font-black mb-2">Add Contest</h2>
+            <div className="absolute -top-20 -right-20 w-60 h-60 bg-[#f5a623]/20 blur-3xl rounded-full" />
 
-            <p className="text-xs text-zinc-500 mb-6">
-              Add HackerRank, CodeChef, LeetCode or custom contest for students.
-            </p>
+            <div className="relative z-10">
+              <h2 className="text-3xl font-black mb-2">Add Contest</h2>
 
-            <input
-              type="text"
-              placeholder="Contest Name"
-              value={contestData.contestName}
-              onChange={(e) =>
-                setContestData({
-                  ...contestData,
-                  contestName: e.target.value,
-                })
-              }
-              className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 mb-4 outline-none text-sm focus:border-yellow-500"
-            />
+              <p className="text-xs text-[#8d86ad] mb-6">
+                Add HackerRank, CodeChef, LeetCode or custom contest for
+                students.
+              </p>
 
-            <input
-              type="text"
-              placeholder="Batch Name"
-              value={contestData.batchName}
-              onChange={(e) =>
-                setContestData({
-                  ...contestData,
-                  batchName: e.target.value,
-                })
-              }
-              className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 mb-4 outline-none text-sm focus:border-yellow-500"
-            />
-
-            <input
-              type="text"
-              placeholder="Platform e.g. HackerRank"
-              value={contestData.platform}
-              onChange={(e) =>
-                setContestData({
-                  ...contestData,
-                  platform: e.target.value,
-                })
-              }
-              className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 mb-4 outline-none text-sm focus:border-yellow-500"
-            />
-
-            <input
-              type="text"
-              placeholder="Contest Link"
-              value={contestData.contestLink}
-              onChange={(e) =>
-                setContestData({
-                  ...contestData,
-                  contestLink: e.target.value,
-                })
-              }
-              className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 mb-4 outline-none text-sm focus:border-yellow-500"
-            />
-
-            <div className="grid grid-cols-2 gap-4 mb-6">
               <input
-                type="date"
-                value={contestData.contestDate}
+                type="text"
+                placeholder="Contest Name"
+                value={contestData.contestName}
                 onChange={(e) =>
                   setContestData({
                     ...contestData,
-                    contestDate: e.target.value,
+                    contestName: e.target.value,
                   })
                 }
-                className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 outline-none text-sm focus:border-yellow-500"
+                className="w-full p-4 rounded-2xl bg-black/30 border border-white/10 mb-4 outline-none text-sm focus:border-[#f5a623] transition"
               />
 
               <input
-                type="time"
-                value={contestData.contestTime}
+                type="text"
+                placeholder="Batch Name"
+                value={contestData.batchName}
                 onChange={(e) =>
                   setContestData({
                     ...contestData,
-                    contestTime: e.target.value,
+                    batchName: e.target.value,
                   })
                 }
-                className="w-full p-4 rounded-2xl bg-zinc-900 border border-zinc-800 outline-none text-sm focus:border-yellow-500"
+                className="w-full p-4 rounded-2xl bg-black/30 border border-white/10 mb-4 outline-none text-sm focus:border-[#f5a623] transition"
               />
-            </div>
 
-            <div className="flex gap-4">
-              <button
-                onClick={createContest}
-                className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black p-4 rounded-2xl text-sm font-black"
-              >
-                Add Contest
-              </button>
+              <input
+                type="text"
+                placeholder="Platform e.g. HackerRank"
+                value={contestData.platform}
+                onChange={(e) =>
+                  setContestData({
+                    ...contestData,
+                    platform: e.target.value,
+                  })
+                }
+                className="w-full p-4 rounded-2xl bg-black/30 border border-white/10 mb-4 outline-none text-sm focus:border-[#f5a623] transition"
+              />
 
-              <button
-                onClick={() => setShowContestModal(false)}
-                className="flex-1 bg-zinc-800 hover:bg-zinc-700 p-4 rounded-2xl text-sm font-bold"
-              >
-                Cancel
-              </button>
+              <input
+                type="text"
+                placeholder="Contest Link"
+                value={contestData.contestLink}
+                onChange={(e) =>
+                  setContestData({
+                    ...contestData,
+                    contestLink: e.target.value,
+                  })
+                }
+                className="w-full p-4 rounded-2xl bg-black/30 border border-white/10 mb-4 outline-none text-sm focus:border-[#f5a623] transition"
+              />
+
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <input
+                  type="date"
+                  value={contestData.contestDate}
+                  onChange={(e) =>
+                    setContestData({
+                      ...contestData,
+                      contestDate: e.target.value,
+                    })
+                  }
+                  className="w-full p-4 rounded-2xl bg-black/30 border border-white/10 outline-none text-sm focus:border-[#f5a623] transition"
+                />
+
+                <input
+                  type="time"
+                  value={contestData.contestTime}
+                  onChange={(e) =>
+                    setContestData({
+                      ...contestData,
+                      contestTime: e.target.value,
+                    })
+                  }
+                  className="w-full p-4 rounded-2xl bg-black/30 border border-white/10 outline-none text-sm focus:border-[#f5a623] transition"
+                />
+              </div>
+
+              <div className="flex gap-4">
+                <button
+                  onClick={createContest}
+                  className="flex-1 bg-[#f5a623] hover:bg-[#ffb536] text-black p-4 rounded-2xl text-sm font-black"
+                >
+                  Add Contest
+                </button>
+
+                <button
+                  onClick={() => setShowContestModal(false)}
+                  className="flex-1 bg-white/8 hover:bg-white/12 border border-white/10 p-4 rounded-2xl text-sm font-bold"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </motion.div>
         </div>
